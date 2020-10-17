@@ -1,0 +1,3 @@
+/Users/eduardosantos/OneDrive - Universidade de Aveiro/UA - LEI/3o ano/1o Semestre/CSLP/CSLPProject/1-VideoPlayer/CMakeFiles/rebuild_cache.dir
+/Users/eduardosantos/OneDrive - Universidade de Aveiro/UA - LEI/3o ano/1o Semestre/CSLP/CSLPProject/1-VideoPlayer/CMakeFiles/edit_cache.dir
+/Users/eduardosantos/OneDrive - Universidade de Aveiro/UA - LEI/3o ano/1o Semestre/CSLP/CSLPProject/1-VideoPlayer/CMakeFiles/VideoPlayer.dir
