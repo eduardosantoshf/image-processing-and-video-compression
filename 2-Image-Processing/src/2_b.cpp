@@ -14,7 +14,7 @@ int main(void)
 
     /*------------ Convert to YUV ------------*/
 
-    yuv_image = convert_to_yuv(initial_image);
+    yuv_image = bgr_to_yuv(initial_image);
     imshow("YUV image", yuv_image);
 
     vector<Mat> yuv_channels;
@@ -32,7 +32,7 @@ int main(void)
 
     /*------------ Convert to HSV ------------*/
 
-    hsv_image = convert_to_hsv(initial_image);
+    hsv_image = bgr_to_hsv(initial_image);
     imshow("HSV image", hsv_image);
 
     vector<Mat> hsv_channels;
