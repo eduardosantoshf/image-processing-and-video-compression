@@ -10,6 +10,10 @@
  */
 cv::Mat insert_watermark(cv::Mat initial_image, cv::Mat watermark, double input);
 
-cv::Mat convert_to_yuv(cv::Mat initial_image);
+cv::Mat bgr_to_yuv(cv::Mat initial_image);
 
-cv::Mat convert_to_hsv(cv::Mat initial_image);
+cv::Mat bgr_to_hsv(cv::Mat initial_image);
+
+cv::Mat bgr_to_grayscale(cv::Mat initial_image);
+
+cv::Mat histo_equalization(cv::Mat initial_image);
