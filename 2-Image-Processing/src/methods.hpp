@@ -1,4 +1,5 @@
 #include <opencv2/core/mat.hpp>
+
 /**
  * Function used to insert a watermark into an image
  * 
@@ -9,15 +10,6 @@
  */
 cv::Mat insert_watermark(cv::Mat initial_image, cv::Mat watermark, double input);
 
-/**
- * Structure to define a pixel using an array of three unsigned chars.
- * Each element of the array represents a value in the RGB color scheme.
- * 
- * Red value: rgb[0]
- * Green value: rgb[1]
- * Blue value: rgb[2]
-*/
-typedef struct 
-{
-    unsigned char rgb[3];
-} RGBPixel;
+cv::Mat convert_to_yuv(cv::Mat initial_image);
+
+cv::Mat convert_to_hsv(cv::Mat initial_image);

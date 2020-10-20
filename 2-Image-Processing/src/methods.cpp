@@ -18,3 +18,18 @@ Mat insert_watermark(Mat initial_image, Mat watermark, double input)
 
     return watermarked_image;
 }
+
+Mat convert_to_yuv(Mat initial_image)
+{
+    Mat yuv_image;
+    cvtColor(initial_image, yuv_image, COLOR_BGR2YUV);
+    return yuv_image;
+}
+
+Mat convert_to_hsv(Mat initial_image)
+{
+    Mat hsv_image;
+    cvtColor(initial_image, hsv_image, COLOR_BGR2HSV);
+    return hsv_image;
+}
+
