@@ -2,9 +2,7 @@
 #include<iostream>
 #include "methods.cpp"
 
-using std::cin;
-using std::cout;
-using std::endl;
+using namespace std;
 using namespace cv;
 
 int main(void)
@@ -27,7 +25,7 @@ int main(void)
 
     watermarked_image = insert_watermark(initial_image, watermark, alpha);
 
-    imshow("Linear Blend", watermarked_image);
+    imshow("Image with watermark", watermarked_image);
     waitKey(0);
 
 }
