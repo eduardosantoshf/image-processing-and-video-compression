@@ -3,7 +3,6 @@
 #include <vector>
 #include "methods.cpp"
 
-using namespace std;
 using namespace cv;
 
 int main(void)
@@ -15,7 +14,7 @@ int main(void)
         return EXIT_FAILURE;
     }
     
-    vector<Mat> bgr_planes;
+    std::vector<Mat> bgr_planes;
     split(src, bgr_planes);
 
     int histSize = 256;
@@ -56,6 +55,6 @@ int main(void)
     imshow("Source image", src );
     imshow("calcHist Demo", histImage );
     waitKey();
-    
+
     return EXIT_SUCCESS;
 }
