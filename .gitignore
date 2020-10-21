@@ -1,2 +1,7 @@
 .DS_Store
 .vscode
+CMakeFiles/
+cmake_install.cmake
+VideoPlayer
+Makefile
+CMakeCache.txt
