@@ -22,4 +22,6 @@ cv::Mat gaussian_blur(cv::Mat initial_image);
 
 cv::Mat regular_blur(cv::Mat initial_image, int b1, int b2);
 
-//cv::Mat threshold_image(cv::Mat initial_image, int t_value, int t_type);
+cv::Mat threshold_image(cv::Mat initial_image, int t_value, int t_type);
+
+cv::Mat morphological_operation(cv::Mat initial_image, cv::Mat result_image, int op, cv::Mat elem);

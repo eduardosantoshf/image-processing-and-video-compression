@@ -57,12 +57,16 @@ Mat regular_blur(Mat initial_image, int b1, int b2)
     blur(initial_image, blured_image, Size(b1, b2));
     return blured_image;
 }
-/*
+
 Mat threshold_image(Mat initial_image, int t_value, int t_type)
 {
-    Mat threshold_image;
-    threshold(initial_image, threshold_image, t_value, 255, t_type);
-    return threshold_image;
+    Mat thresholded_image;
+    threshold(initial_image, thresholded_image, t_value, 255, t_type);
+    return thresholded_image;
 }
-*/
 
+Mat morphological_operation(Mat initial_image, Mat result_image, int op, Mat elem)
+{
+    morphologyEx(initial_image, result_image, op, elem);
+    return result_image;
+}
