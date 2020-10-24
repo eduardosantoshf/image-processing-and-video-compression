@@ -70,3 +70,24 @@ Mat morphological_operation(Mat initial_image, Mat result_image, int op, Mat ele
     morphologyEx(initial_image, result_image, op, elem);
     return result_image;
 }
+
+Mat sobel_derivative(Mat initial_image, int ddepth, int x, int y, int ksize, int scale, int delta)
+{
+    Mat grad;
+    Sobel(initial_image, grad, ddepth, x, y, ksize, scale, delta, BORDER_DEFAULT);
+    return grad;
+}
+
+Mat scharr_derivative(Mat initial_image, int ddepth, int x, int y, int scale, int delta)
+{
+    Mat grad;
+    Scharr(initial_image, grad, ddepth, x, y, scale, delta, BORDER_DEFAULT);
+    return grad;
+}
+
+Mat laplacian_derivative(Mat initial_image)
+{
+    Mat grad;
+    Laplacian(initial_image, grad, CV_16S, 5);
+    return grad;
+}

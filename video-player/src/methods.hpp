@@ -25,3 +25,9 @@ cv::Mat regular_blur(cv::Mat initial_image, int b1, int b2);
 cv::Mat threshold_image(cv::Mat initial_image, int t_value, int t_type);
 
 cv::Mat morphological_operation(cv::Mat initial_image, cv::Mat result_image, int op, cv::Mat elem);
+
+cv::Mat sobel_derivative(cv::Mat initial_image, int ddepth, int x, int y, int ksize, int scale, int delta);
+
+cv::Mat scharr_derivative(cv::Mat initial_image, int ddepth, int x, int y, int scale, int delta);
+
+cv::Mat laplacian_derivative(cv::Mat initial_image);
