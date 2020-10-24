@@ -38,8 +38,8 @@ int main(int argc, char** argv)
 
         Mat grad_x_sobel, grad_y_sobel;
         Mat abs_grad_x_sobel, abs_grad_y_sobel;
-        Sobel(src_gray, grad_x_sobel, ddepth, 1, 0, ksize, scale, delta, BORDER_DEFAULT);
-        Sobel(src_gray, grad_y_sobel, ddepth, 0, 1, ksize, scale, delta, BORDER_DEFAULT);
+        grad_x_sobel = sobel_derivative(src_gray, ddepth, 1, 0, ksize, scale, delta);
+        grad_y_sobel = sobel_derivative(src_gray, ddepth, 0, 1, ksize, scale, delta);
         // converting back to CV_8U
         convertScaleAbs(grad_x_sobel, abs_grad_x_sobel);
         convertScaleAbs(grad_y_sobel, abs_grad_y_sobel);
@@ -47,24 +47,24 @@ int main(int argc, char** argv)
         imshow("Sobel Video", grad_sobel);
 
         /*--------------- Scharr Derivative ---------------*/
-
+        
         Mat grad_x_scharr, grad_y_scharr;
         Mat abs_grad_x_scharr, abs_grad_y_scharr;
-        Scharr(src_gray, grad_x_scharr, ddepth, 1, 0, scale, delta, BORDER_DEFAULT);
-        Scharr(src_gray, grad_y_scharr, ddepth, 0, 1, scale, delta, BORDER_DEFAULT);
+        grad_x_scharr = scharr_derivative(src_gray, ddepth, 1, 0, scale, delta);
+        grad_y_scharr = scharr_derivative(src_gray, ddepth, 0, 1, scale, delta);
         // converting back to CV_8U
         convertScaleAbs(grad_x_scharr, abs_grad_x_scharr);
         convertScaleAbs(grad_y_scharr, abs_grad_y_scharr);
         addWeighted(abs_grad_x_scharr, 0.5, abs_grad_y_scharr, 0.5, 0, grad_scharr);
         imshow("Scharr Video", grad_scharr);
-
+        
         /*-------------- Laplacian Derivative --------------*/
-
+        
         Mat grad_laplacian;
         Mat abs_grad_laplacian;
         Mat result;
-        Laplacian(src_gray, grad_laplacian, ddepth, ksize, scale, delta, BORDER_DEFAULT);
-        Laplacian(src_gray, grad_laplacian, CV_16S, 5);
+        //laplacian_derivative(src_gray, ddepth, ksize, scale, delta);
+        grad_laplacian = laplacian_derivative(src_gray);
         convertScaleAbs(grad_laplacian, result, 1);
         imshow("Laplacian Video", result);
         
