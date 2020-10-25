@@ -91,3 +91,9 @@ Mat laplacian_derivative(Mat initial_image)
     Laplacian(initial_image, grad, CV_16S, 5);
     return grad;
 }
+
+Mat canny_edge_detector(Mat detected_edges, Mat detected_edges2, int lowThreshold, int ratio2, int kernel_size)
+{
+    Canny( detected_edges, detected_edges2, lowThreshold, lowThreshold * ratio2, kernel_size);
+    return detected_edges2;
+}

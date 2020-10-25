@@ -10,10 +10,28 @@
  */
 cv::Mat insert_watermark(cv::Mat initial_image, cv::Mat watermark, double input);
 
+/**
+ * Function used to convert a RGB image to YUV colorspace
+ * 
+ * @param initial_image Mat class, containing the initial image
+ * @return YUV image
+ */
 cv::Mat bgr_to_yuv(cv::Mat initial_image);
 
+/**
+ * Function used to convert a RGB image to HSV colorspace
+ * 
+ * @param initial_image Mat class, containing the initial image
+ * @return HSV image
+ */
 cv::Mat bgr_to_hsv(cv::Mat initial_image);
 
+/**
+ * Function used to convert a RGB image to grayscale
+ * 
+ * @param initial_image Mat class, containing the initial image
+ * @return Grayscaled image
+ */
 cv::Mat bgr_to_grayscale(cv::Mat initial_image);
 
 cv::Mat histo_equalization(cv::Mat initial_image);
@@ -31,3 +49,5 @@ cv::Mat sobel_derivative(cv::Mat initial_image, int ddepth, int x, int y, int ks
 cv::Mat scharr_derivative(cv::Mat initial_image, int ddepth, int x, int y, int scale, int delta);
 
 cv::Mat laplacian_derivative(cv::Mat initial_image);
+
+cv::Mat canny_edge_detector(cv::Mat detected_edges, cv::Mat detected_edges2, int lowThreshold, int ratio2, int kernel_size);
