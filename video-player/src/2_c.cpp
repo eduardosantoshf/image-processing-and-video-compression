@@ -20,7 +20,7 @@ int main(void)
     if (frame.empty())
         break;
 
-    resize(frame, resized_frame, Size(800, 800));
+    resize(frame, resized_frame, Size(500, 500));
 
     std::vector<Mat> bgr_planes;
     split(resized_frame, bgr_planes);
