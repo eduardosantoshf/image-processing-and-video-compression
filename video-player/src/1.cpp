@@ -24,6 +24,8 @@ int main() {
     if (frame.empty())
       break;
 
+    resize(frame, frame, Size(500, 500));
+
     // Display the resulting frame
     imshow("Frame", frame);
 
