@@ -10,7 +10,6 @@ int main(void)
 {
     Mat yuv_src, resized_src;
 
-    //Mat src = imread("../images/windowsXP.jpg", IMREAD_COLOR);
     VideoCapture cap("../videos/akiyo_qcif.y4m");
 
     while (1) {
@@ -107,5 +106,4 @@ int main(void)
     }
     
     waitKey(0);
-    
 }
