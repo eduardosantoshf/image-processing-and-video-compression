@@ -10,14 +10,22 @@ int main(void)
 {
     Mat yuv_src, resized_src;
 
-    Mat src = imread("../images/windowsXP.jpg", IMREAD_COLOR);
-    
-    resize(src, resized_src, Size(500, 500));
+    //Mat src = imread("../images/windowsXP.jpg", IMREAD_COLOR);
+    VideoCapture cap("../videos/akiyo_qcif.y4m");
 
-    if (src.empty()) return EXIT_FAILURE;
+    while (1) {
+
+    Mat frame;
+    // Capture frame-by-frame
+    cap >> frame;
+ 
+    // If the frame is empty, break immediately
+    if (frame.empty()) break;
+    
+    resize(frame, frame, Size(500, 500));
 
     //yuv_src = bgr_to_yuv(src);
-    cvtColor(src, yuv_src, COLOR_RGB2YUV);
+    cvtColor(frame, yuv_src, COLOR_RGB2YUV);
 
     vector<Mat> yuv_channels;
     split(yuv_src, yuv_channels);
@@ -93,6 +101,10 @@ int main(void)
     cvtColor(result_420, result_420, COLOR_YUV2RGB);
     
     imshow("YUV420", result_420);
+
+    char c = (char) waitKey(25);
+    if (c==27) break;
+    }
     
     waitKey(0);
     
