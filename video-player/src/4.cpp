@@ -26,14 +26,25 @@ class BitStream {
             //cout << pos;
 
             if (pos == 8) {
-                ofstream ofs("test.bin", ios::binary);
+                ofstream ofs("test.bin", ios::binary | ios::app);
                 ofs.write(reinterpret_cast<char*>(&buff), sizeof(buff) * sizeof(char));
                 ofs.close();
                 pos = 0;
                 buff = 0;
             }
         }
+
+        void readBit() {
+            ifstream ifs("test.bin", ios::binary | ios::in);
+            char c;
+            while (ifs.get(c)) {
+                for (int i = 7; i >= 0; i--)
+                    cout << ((c >> i) & 1);
+                    cout << "\n";
+            }
+        }
         
+        /*
         void readfile() {
             int length;
             char* buffer;
@@ -52,6 +63,7 @@ class BitStream {
             ifsb.close();
             //for (char x: buffer) cout << x << endl;
         }
+        */
 };
 
 int main(void)
@@ -80,28 +92,7 @@ int main(void)
     bs.writeBit(1);
     
 
-    
-    bs.readfile();
-
-    /*
-    //Test to write binary file
-    vector<int> v;
-    for (int i = 0 ; i < 10 ; i++) v.push_back(i * 10);
-
-    ofstream ofsb("data.bin", ios::binary); 
-    ofsb.write(reinterpret_cast<char*>(v.data()), v.size() * sizeof(int)); 
-    ofsb.close();
-
-    //Test to read binary file
-    v.clear();
-    v.resize(10);
-    ifstream ifsb("data.bin", ios::binary); 
-    ifsb.read(reinterpret_cast<char*>(v.data()), v.size() * sizeof(int)); 
-    ifsb.close();
-    for(auto x : v) cout << x << endl;
-    */
-    
-
-    
+    bs.readBit();
+    //bs.readfile();
 }
 
