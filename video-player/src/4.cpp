@@ -10,7 +10,7 @@ using namespace cv;
 class BitStream {
     public:
         int pos = 0;
-        unsigned char buff;
+        unsigned char buff = 0;
         const char* filename;
 
         BitStream(const char* fn) {
@@ -19,39 +19,70 @@ class BitStream {
 
         void writeBit(int bit) {
             //cout << bit;
-            if (bit) buff |= (bit << pos);
+            if (bit) 
+                buff |= (1 << pos);
+
             pos++;
-            cout << pos;
-            ofstream ofs("test.bin", ios::binary);
+            //cout << pos;
 
             if (pos == 8) {
-                ofs.write(reinterpret_cast<const char*>(&buff), sizeof(buff));
+                ofstream ofs("test.bin", ios::binary);
+                ofs.write(reinterpret_cast<char*>(&buff), sizeof(buff) * sizeof(char));
                 ofs.close();
                 pos = 0;
                 buff = 0;
             }
         }
-        /*
-        void flushBits(void) {
-            while (pos) writeBit (0);
-        }
-        */
-        /*
+        
         void readfile() {
-            char* buffer = new char[20];
-            ifstream ifsb("test.bin", ios::binary);
-            ifsb.read(buffer, 20);
+            int length;
+            char* buffer;
+            ifstream ifsb;
+            ifsb.open("test.bin", ios::binary);
+
+            ifsb.seekg (0, ios::end);
+            length = ifsb.tellg();
+            ifsb.seekg (0, ios::beg);
+
+            buffer = new char[1];
+
+            ifsb.read(buffer, 1);
             if (ifsb) cout << "Read successfully!";
             else cout << "Error!";
             ifsb.close();
             //for (char x: buffer) cout << x << endl;
         }
-        */
-        
 };
 
 int main(void)
 {
+    ofstream o;
+
+    BitStream bs("teste.txt");
+    bs.writeBit(0);
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+
+    //bs.flushBits();
+    
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(1);
+    
+
+    
+    bs.readfile();
+
     /*
     //Test to write binary file
     vector<int> v;
@@ -69,19 +100,8 @@ int main(void)
     ifsb.close();
     for(auto x : v) cout << x << endl;
     */
+    
 
-
-
-    BitStream bs("teste.txt");
-    bs.writeBit(0);
-    bs.writeBit(1);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    //bs.flushBits();
-    //bs.readfile();
+    
 }
 
