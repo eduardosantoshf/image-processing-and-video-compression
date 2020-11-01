@@ -17,10 +17,9 @@ class BitStream {
             filename = fn;
         }
 
-        void writebit(int bit) {
+        void writeBit(int bit) {
             //cout << bit;
-            if (bit) 
-                buff |= (bit << pos);
+            if (bit) buff |= (bit << pos);
             pos++;
             cout << pos;
             ofstream ofs("test.bin", ios::binary);
@@ -32,6 +31,11 @@ class BitStream {
                 buff = 0;
             }
         }
+        /*
+        void flushBits(void) {
+            while (pos) writeBit (0);
+        }
+        */
         /*
         void readfile() {
             char* buffer = new char[20];
@@ -69,14 +73,15 @@ int main(void)
 
 
     BitStream bs("teste.txt");
-    bs.writebit(0);
-    bs.writebit(1);
-    bs.writebit(0);
-    bs.writebit(0);
-    bs.writebit(0);
-    bs.writebit(0);
-    bs.writebit(0);
-    bs.writebit(0);
+    bs.writeBit(0);
+    bs.writeBit(1);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    bs.writeBit(0);
+    //bs.flushBits();
     //bs.readfile();
 }
 
