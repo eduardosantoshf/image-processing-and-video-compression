@@ -1,4 +1,3 @@
-#include<opencv2/opencv.hpp>
 #include<iostream>
 #include<fstream>
 #include <vector>
@@ -12,18 +11,17 @@ class BitStream {
         int pos = 0;
         unsigned char buff = 0;
         const char* filename;
+        int position = 0;
 
         BitStream(const char* fn) {
             filename = fn;
         }
 
         void writeBit(int bit) {
-            //cout << bit;
             if (bit) 
                 buff |= (1 << pos);
 
             pos++;
-            //cout << pos;
 
             if (pos == 8) {
                 ofstream ofs("test.bin", ios::binary | ios::app);
@@ -33,8 +31,20 @@ class BitStream {
                 buff = 0;
             }
         }
-
-        void readBit() {
+        
+        void readBit() { //only read first line
+            ifstream ifs("test.bin", ios::binary | ios::in);
+            char c;
+            while (ifs.get(c)) {
+                if (position <= 7) {
+                    cout << ((c >> position) & 1);
+                    cout << "\n";
+                    position++;
+                }
+            }
+        }
+        
+        void readFile() {
             ifstream ifs("test.bin", ios::binary | ios::in);
             char c;
             while (ifs.get(c)) {
@@ -43,27 +53,6 @@ class BitStream {
                     cout << "\n";
             }
         }
-        
-        /*
-        void readfile() {
-            int length;
-            char* buffer;
-            ifstream ifsb;
-            ifsb.open("test.bin", ios::binary);
-
-            ifsb.seekg (0, ios::end);
-            length = ifsb.tellg();
-            ifsb.seekg (0, ios::beg);
-
-            buffer = new char[1];
-
-            ifsb.read(buffer, 1);
-            if (ifsb) cout << "Read successfully!";
-            else cout << "Error!";
-            ifsb.close();
-            //for (char x: buffer) cout << x << endl;
-        }
-        */
 };
 
 int main(void)
@@ -81,7 +70,7 @@ int main(void)
     bs.writeBit(0);
 
     //bs.flushBits();
-    
+    /*
     bs.writeBit(0);
     bs.writeBit(0);
     bs.writeBit(0);
@@ -90,9 +79,16 @@ int main(void)
     bs.writeBit(0);
     bs.writeBit(0);
     bs.writeBit(1);
-    
+    */
 
+    //bs.readBit();
+    bs.readFile();
     bs.readBit();
-    //bs.readfile();
+    bs.readBit();
+    bs.readBit();
+    bs.readBit();
+    bs.readBit();
+    bs.readBit();
+    bs.readBit();
 }
 
