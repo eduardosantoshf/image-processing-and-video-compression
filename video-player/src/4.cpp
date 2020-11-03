@@ -1,6 +1,5 @@
 #include<iostream>
 #include<fstream>
-#include <vector>
 #include "methods.cpp"
 
 using namespace std;
@@ -10,40 +9,52 @@ class BitStream {
     public:
         int pos = 0;
         unsigned char buff = 0;
-        const char* filename;
-        int position = 0;
+        fstream fsi;
+        fstream fso;
+        unsigned char readBuff = 0;
+        int cont = 1;
+        bitset<8> b;
+        string filename;
 
-        BitStream(const char* fn) {
+        BitStream(string fn) {
             filename = fn;
         }
-
+        
         void writeBit(int bit) {
             if (bit) 
                 buff |= (1 << pos);
-
             pos++;
 
             if (pos == 8) {
-                ofstream ofs("test.bin", ios::binary | ios::app);
-                ofs.write(reinterpret_cast<char*>(&buff), sizeof(buff) * sizeof(char));
-                ofs.close();
+                fso.open(filename, ios::binary | ios::app);
+                fso.write(reinterpret_cast<char*>(&buff), sizeof(buff) * sizeof(char));
+                fso.close();
                 pos = 0;
                 buff = 0;
             }
         }
-        
-        void readBit() { //only read first line
-            ifstream ifs("test.bin", ios::binary | ios::in);
-            char c;
-            while (ifs.get(c)) {
-                if (position <= 7) {
-                    cout << ((c >> position) & 1);
-                    cout << "\n";
-                    position++;
-                }
+
+       void readBit(int n) {
+            fsi.open(filename, ios::in | ios::binary);
+            readBuff = 0;
+
+            while (n > 7) {
+                cont++;
+                n = n - 8;
             }
-        }
-        
+
+            for (int j = 0; j < cont; j++) {
+                fsi.read(reinterpret_cast<char *>(&readBuff), 1);
+            }
+
+            b = bitset<8>(readBuff);
+            cout << b << "\n";
+
+            cout << b.to_string()[n] << "\n";
+            fsi.close();
+
+       }
+
         void readFile() {
             ifstream ifs("test.bin", ios::binary | ios::in);
             char c;
@@ -52,43 +63,43 @@ class BitStream {
                     cout << ((c >> i) & 1);
                     cout << "\n";
             }
+            ifs.close();
         }
 };
 
 int main(void)
 {
-    ofstream o;
 
-    BitStream bs("teste.txt");
-    bs.writeBit(0);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-
-    //bs.flushBits();
+    BitStream bs("test.bin");
     /*
+    
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(0);
+    bs.writeBit(1);
     bs.writeBit(0);
     bs.writeBit(0);
+    
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(1);
+    bs.writeBit(1);
     bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    bs.writeBit(0);
+    bs.writeBit(1);
     bs.writeBit(1);
     */
-
-    //bs.readBit();
+    
     bs.readFile();
-    bs.readBit();
-    bs.readBit();
-    bs.readBit();
-    bs.readBit();
-    bs.readBit();
-    bs.readBit();
-    bs.readBit();
+    //bs.readBit(11);
+
+    
+    for (int i = 0; i < 16; i++) {
+        bs.readBit(i);
+    }
+    
+ 
 }
 
