@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['histo_5fequalization_22',['histo_equalization',['../methods_8cpp.html#a5893ba8b7598289cbe6214cd088eb1df',1,'histo_equalization(Mat initial_image):&#160;methods.cpp'],['../methods_8hpp.html#a878b642fadf2e955ed2af2298c7563c6',1,'histo_equalization(cv::Mat initial_image):&#160;methods.hpp']]]
+  ['filename_26',['filename',['../class_bit_stream.html#a7e24579804316d020e02387270b56642',1,'BitStream']]],
+  ['fsi_27',['fsi',['../class_bit_stream.html#ab560f0d604d59e81f14e22733f31837b',1,'BitStream']]],
+  ['fsif_28',['fsiF',['../class_bit_stream.html#a789499b6152e0b753d5b1d7c2ce82217',1,'BitStream']]],
+  ['fso_29',['fso',['../class_bit_stream.html#a14dfa3c326334c535f8e1fe14d0b6ffc',1,'BitStream']]]
 ];

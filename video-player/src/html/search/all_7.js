@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['gaussian_5fblur_21',['gaussian_blur',['../methods_8cpp.html#a4595e991ec171cbbe418a49e16320ce2',1,'gaussian_blur(Mat initial_image, int k1, int k2):&#160;methods.cpp'],['../methods_8hpp.html#a1b17455e66dcb47c956b4d52aa2372bc',1,'gaussian_blur(cv::Mat initial_image):&#160;methods.hpp']]]
+  ['detected_5fedges_24',['detected_edges',['../2__i_8cpp.html#a4bacbd9010b08c6f0a202fe7be02d514',1,'2_i.cpp']]],
+  ['dst_25',['dst',['../2__g_8cpp.html#ac9a593bb71b514837b6e8611e1afb36a',1,'dst():&#160;2_g.cpp'],['../2__i_8cpp.html#ac9a593bb71b514837b6e8611e1afb36a',1,'dst():&#160;2_i.cpp']]]
 ];
