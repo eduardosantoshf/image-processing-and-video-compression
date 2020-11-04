@@ -56,6 +56,12 @@ class BitStream {
 
        }
 
+       void readNBits(int n) {
+            for (int i = 0; i < n; i++) {
+                readBit(i);
+            }
+       }
+
         void readFile() {
             fsiF.open("test.bin", ios::binary | ios::in);
             char c;
@@ -94,14 +100,7 @@ int main(void)
     */
     
     bs.readFile();
-
-    cout << "\n";
-    
-    for (int i = 0; i < 20; i++) {
-        cout << "i: " << i << " ---- ";
-        bs.readBit(i);
-    }
-    
  
+    bs.readNBits(13);
 }
 
