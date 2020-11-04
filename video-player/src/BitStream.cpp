@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<bitset>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ class BitStream {
 
         BitStream(string fn) {
             filename = fn;
+            
         }
         
         void writeBit(int bit) {
@@ -114,6 +116,9 @@ class BitStream {
                 cout << a[i];
                 lengthA++;
             }
+
+            cout << "\n";
+            cout << "\n";
 
             if (b >= lengthA) {
                 surplus = b - lengthA;
