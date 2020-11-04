@@ -72,12 +72,16 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a070a2022791a1b69745eab99c457495c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a070a2022791a1b69745eab99c457495c">BitStream</a> (string fn)</td></tr>
-<tr class="separator:a070a2022791a1b69745eab99c457495c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0af9676451891b51f56f8a33e8173cee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a0af9676451891b51f56f8a33e8173cee">BitStream</a> (string fn, char op)</td></tr>
+<tr class="separator:a0af9676451891b51f56f8a33e8173cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa86adee7779cf956e70348f392a1a985"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#aa86adee7779cf956e70348f392a1a985">writeBit</a> (int bit)</td></tr>
 <tr class="separator:aa86adee7779cf956e70348f392a1a985"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56f7cad84e6f6c9d9366a933578a3310"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a56f7cad84e6f6c9d9366a933578a3310">readBit</a> (int n)</td></tr>
-<tr class="separator:a56f7cad84e6f6c9d9366a933578a3310"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d238d7a4337708fd9f06ff85b5514b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a4d238d7a4337708fd9f06ff85b5514b1">closeFO</a> ()</td></tr>
+<tr class="separator:a4d238d7a4337708fd9f06ff85b5514b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86b43c1ff5e42d3cdcd115eef6d7ba99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a86b43c1ff5e42d3cdcd115eef6d7ba99">closeFI</a> ()</td></tr>
+<tr class="separator:a86b43c1ff5e42d3cdcd115eef6d7ba99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96882fcd55063fbf225aee0d1dbf7c5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a96882fcd55063fbf225aee0d1dbf7c5f">readBit</a> ()</td></tr>
+<tr class="separator:a96882fcd55063fbf225aee0d1dbf7c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bd23872284616ef322d3d226cc2eec8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a6bd23872284616ef322d3d226cc2eec8">readNBits</a> (int n)</td></tr>
 <tr class="separator:a6bd23872284616ef322d3d226cc2eec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c2ceaa79041ce56d0667921a4756714"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a5c2ceaa79041ce56d0667921a4756714">writeNBits</a> (int n, int <a class="el" href="class_bit_stream.html#a7744d1a95fd5a173e1f99f4650becb34">b</a>)</td></tr>
@@ -89,6 +93,8 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a38a4ee67424234c5e9461d238fbc0649"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a38a4ee67424234c5e9461d238fbc0649">pos</a> = 0</td></tr>
 <tr class="separator:a38a4ee67424234c5e9461d238fbc0649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a277298a885583b5371921cca7c562c88"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a277298a885583b5371921cca7c562c88">pos2</a> = 8</td></tr>
+<tr class="separator:a277298a885583b5371921cca7c562c88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8488145b6568c6c0fb63bb1d68351974"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a8488145b6568c6c0fb63bb1d68351974">buff</a> = 0</td></tr>
 <tr class="separator:a8488145b6568c6c0fb63bb1d68351974"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab560f0d604d59e81f14e22733f31837b"><td class="memItemLeft" align="right" valign="top">fstream&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#ab560f0d604d59e81f14e22733f31837b">fsi</a></td></tr>
@@ -103,10 +109,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a7744d1a95fd5a173e1f99f4650becb34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e24579804316d020e02387270b56642"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a7e24579804316d020e02387270b56642">filename</a></td></tr>
 <tr class="separator:a7e24579804316d020e02387270b56642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeac51468e7324b95f10122b88c461893"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#aeac51468e7324b95f10122b88c461893">type</a></td></tr>
+<tr class="separator:aeac51468e7324b95f10122b88c461893"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a070a2022791a1b69745eab99c457495c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a070a2022791a1b69745eab99c457495c">&#9670;&nbsp;</a></span>BitStream()</h2>
+<a id="a0af9676451891b51f56f8a33e8173cee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0af9676451891b51f56f8a33e8173cee">&#9670;&nbsp;</a></span>BitStream()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -118,8 +126,18 @@ Public Attributes</h2></td></tr>
           <td class="memname">BitStream::BitStream </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>fn</em></td><td>)</td>
+          <td class="paramname"><em>fn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>op</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -132,8 +150,58 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a56f7cad84e6f6c9d9366a933578a3310"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56f7cad84e6f6c9d9366a933578a3310">&#9670;&nbsp;</a></span>readBit()</h2>
+<a id="a86b43c1ff5e42d3cdcd115eef6d7ba99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86b43c1ff5e42d3cdcd115eef6d7ba99">&#9670;&nbsp;</a></span>closeFI()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BitStream::closeFI </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d238d7a4337708fd9f06ff85b5514b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d238d7a4337708fd9f06ff85b5514b1">&#9670;&nbsp;</a></span>closeFO()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BitStream::closeFO </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a96882fcd55063fbf225aee0d1dbf7c5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96882fcd55063fbf225aee0d1dbf7c5f">&#9670;&nbsp;</a></span>readBit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,8 +212,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BitStream::readBit </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -156,12 +223,6 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Function used to read one bit at a time from the given file</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n</td><td>position of the bit we want to read, starting at 0</td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -400,6 +461,20 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a277298a885583b5371921cca7c562c88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a277298a885583b5371921cca7c562c88">&#9670;&nbsp;</a></span>pos2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BitStream::pos2 = 8</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab1c33115c0a25fa49db5ee13307f4e55"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab1c33115c0a25fa49db5ee13307f4e55">&#9670;&nbsp;</a></span>readBuff</h2>
 
@@ -408,6 +483,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">unsigned char BitStream::readBuff = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeac51468e7324b95f10122b88c461893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeac51468e7324b95f10122b88c461893">&#9670;&nbsp;</a></span>type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char BitStream::type</td>
         </tr>
       </table>
 </div><div class="memdoc">

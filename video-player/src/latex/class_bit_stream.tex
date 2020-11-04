@@ -3,11 +3,15 @@
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_bit_stream_a070a2022791a1b69745eab99c457495c}{Bit\+Stream}} (string fn)
+\mbox{\hyperlink{class_bit_stream_a0af9676451891b51f56f8a33e8173cee}{Bit\+Stream}} (string fn, char op)
 \item 
 void \mbox{\hyperlink{class_bit_stream_aa86adee7779cf956e70348f392a1a985}{write\+Bit}} (int bit)
 \item 
-void \mbox{\hyperlink{class_bit_stream_a56f7cad84e6f6c9d9366a933578a3310}{read\+Bit}} (int n)
+void \mbox{\hyperlink{class_bit_stream_a4d238d7a4337708fd9f06ff85b5514b1}{close\+FO}} ()
+\item 
+void \mbox{\hyperlink{class_bit_stream_a86b43c1ff5e42d3cdcd115eef6d7ba99}{close\+FI}} ()
+\item 
+void \mbox{\hyperlink{class_bit_stream_a96882fcd55063fbf225aee0d1dbf7c5f}{read\+Bit}} ()
 \item 
 void \mbox{\hyperlink{class_bit_stream_a6bd23872284616ef322d3d226cc2eec8}{read\+N\+Bits}} (int n)
 \item 
@@ -19,6 +23,8 @@ void \mbox{\hyperlink{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}{read\+
 \begin{DoxyCompactItemize}
 \item 
 int \mbox{\hyperlink{class_bit_stream_a38a4ee67424234c5e9461d238fbc0649}{pos}} = 0
+\item 
+int \mbox{\hyperlink{class_bit_stream_a277298a885583b5371921cca7c562c88}{pos2}} = 8
 \item 
 unsigned char \mbox{\hyperlink{class_bit_stream_a8488145b6568c6c0fb63bb1d68351974}{buff}} = 0
 \item 
@@ -33,33 +39,40 @@ unsigned char \mbox{\hyperlink{class_bit_stream_ab1c33115c0a25fa49db5ee13307f4e5
 bitset$<$ 8 $>$ \mbox{\hyperlink{class_bit_stream_a7744d1a95fd5a173e1f99f4650becb34}{b}}
 \item 
 string \mbox{\hyperlink{class_bit_stream_a7e24579804316d020e02387270b56642}{filename}}
+\item 
+char \mbox{\hyperlink{class_bit_stream_aeac51468e7324b95f10122b88c461893}{type}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_bit_stream_a070a2022791a1b69745eab99c457495c}\label{class_bit_stream_a070a2022791a1b69745eab99c457495c}} 
+\mbox{\Hypertarget{class_bit_stream_a0af9676451891b51f56f8a33e8173cee}\label{class_bit_stream_a0af9676451891b51f56f8a33e8173cee}} 
 \index{BitStream@{BitStream}!BitStream@{BitStream}}
 \index{BitStream@{BitStream}!BitStream@{BitStream}}
 \doxysubsubsection{\texorpdfstring{BitStream()}{BitStream()}}
-{\footnotesize\ttfamily Bit\+Stream\+::\+Bit\+Stream (\begin{DoxyParamCaption}\item[{string}]{fn }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily Bit\+Stream\+::\+Bit\+Stream (\begin{DoxyParamCaption}\item[{string}]{fn,  }\item[{char}]{op }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_bit_stream_a56f7cad84e6f6c9d9366a933578a3310}\label{class_bit_stream_a56f7cad84e6f6c9d9366a933578a3310}} 
+\mbox{\Hypertarget{class_bit_stream_a86b43c1ff5e42d3cdcd115eef6d7ba99}\label{class_bit_stream_a86b43c1ff5e42d3cdcd115eef6d7ba99}} 
+\index{BitStream@{BitStream}!closeFI@{closeFI}}
+\index{closeFI@{closeFI}!BitStream@{BitStream}}
+\doxysubsubsection{\texorpdfstring{closeFI()}{closeFI()}}
+{\footnotesize\ttfamily void Bit\+Stream\+::close\+FI (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_bit_stream_a4d238d7a4337708fd9f06ff85b5514b1}\label{class_bit_stream_a4d238d7a4337708fd9f06ff85b5514b1}} 
+\index{BitStream@{BitStream}!closeFO@{closeFO}}
+\index{closeFO@{closeFO}!BitStream@{BitStream}}
+\doxysubsubsection{\texorpdfstring{closeFO()}{closeFO()}}
+{\footnotesize\ttfamily void Bit\+Stream\+::close\+FO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_bit_stream_a96882fcd55063fbf225aee0d1dbf7c5f}\label{class_bit_stream_a96882fcd55063fbf225aee0d1dbf7c5f}} 
 \index{BitStream@{BitStream}!readBit@{readBit}}
 \index{readBit@{readBit}!BitStream@{BitStream}}
 \doxysubsubsection{\texorpdfstring{readBit()}{readBit()}}
-{\footnotesize\ttfamily void Bit\+Stream\+::read\+Bit (\begin{DoxyParamCaption}\item[{int}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void Bit\+Stream\+::read\+Bit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Function used to read one bit at a time from the given file
-
-
-\begin{DoxyParams}{Parameters}
-{\em n} & position of the bit we want to read, starting at 0\\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}\label{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}} 
+Function used to read one bit at a time from the given file\mbox{\Hypertarget{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}\label{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}} 
 \index{BitStream@{BitStream}!readFile@{readFile}}
 \index{readFile@{readFile}!BitStream@{BitStream}}
 \doxysubsubsection{\texorpdfstring{readFile()}{readFile()}}
@@ -151,11 +164,23 @@ Function used to write N bits at a time from the given file
 \doxysubsubsection{\texorpdfstring{pos}{pos}}
 {\footnotesize\ttfamily int Bit\+Stream\+::pos = 0}
 
+\mbox{\Hypertarget{class_bit_stream_a277298a885583b5371921cca7c562c88}\label{class_bit_stream_a277298a885583b5371921cca7c562c88}} 
+\index{BitStream@{BitStream}!pos2@{pos2}}
+\index{pos2@{pos2}!BitStream@{BitStream}}
+\doxysubsubsection{\texorpdfstring{pos2}{pos2}}
+{\footnotesize\ttfamily int Bit\+Stream\+::pos2 = 8}
+
 \mbox{\Hypertarget{class_bit_stream_ab1c33115c0a25fa49db5ee13307f4e55}\label{class_bit_stream_ab1c33115c0a25fa49db5ee13307f4e55}} 
 \index{BitStream@{BitStream}!readBuff@{readBuff}}
 \index{readBuff@{readBuff}!BitStream@{BitStream}}
 \doxysubsubsection{\texorpdfstring{readBuff}{readBuff}}
 {\footnotesize\ttfamily unsigned char Bit\+Stream\+::read\+Buff = 0}
+
+\mbox{\Hypertarget{class_bit_stream_aeac51468e7324b95f10122b88c461893}\label{class_bit_stream_aeac51468e7324b95f10122b88c461893}} 
+\index{BitStream@{BitStream}!type@{type}}
+\index{type@{type}!BitStream@{BitStream}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily char Bit\+Stream\+::type}
 
 
 
