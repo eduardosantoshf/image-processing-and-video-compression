@@ -19,6 +19,15 @@ class BitStream {
         }
         
         void writeBit(int bit) {
+
+            /**
+             * Function used to write individual bits on file, 
+             * knowing that to write data in a file we have to
+             * do it 1 byte (8 bits) at a time
+             * 
+             * @param bit value that we want to write
+             */
+
             if (bit) 
                 buff |= (1 << pos);
             pos++;
@@ -33,6 +42,15 @@ class BitStream {
         }
 
        void readBit(int n) {
+
+            /**
+             * Function used to read one bit at a time from
+             * the given file
+             * 
+             * @param n position of the bit we want to read, 
+             * starting at 0
+             */
+
            int cont = 1;
             fsi.open(filename, ios::in | ios::binary);
             readBuff = 0;
@@ -55,6 +73,15 @@ class BitStream {
        }
 
        void readNBits(int n) {
+
+           /**
+             * Function used to read N bits at a time from
+             * the given file
+             * 
+             * @param n number of bits we want to read, 
+             * starting from the first one (index 0)
+             */
+
             for (int i = 0; i < n; i++) {
                 readBit(i);
             }
@@ -65,6 +92,12 @@ class BitStream {
        }
 
         void readFile() {
+
+            /**
+             * Function used to read all the lines 
+             * from the file
+             */
+
             fsiF.open("test.bin", ios::binary | ios::in);
             char c;
             while (fsiF.get(c)) {
