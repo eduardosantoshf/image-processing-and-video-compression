@@ -7,6 +7,7 @@ using namespace std;
 class BitStream {
     public:
         int pos = 0;
+        int pos2 = 8;
         unsigned char buff = 0;
         fstream fsi;
         fstream fso;
@@ -14,10 +15,16 @@ class BitStream {
         unsigned char readBuff = 0;
         bitset<8> b;
         string filename;
+        char type;
 
-        BitStream(string fn) {
+        BitStream(string fn, char op) {
             filename = fn;
-            
+            type = op;
+            if (type == 'w')
+                fso.open(filename, ios::binary | ios::app);
+            else if (type == 'r') {
+                fsi.open(filename, ios::in | ios::binary);
+            }
         }
         
         void writeBit(int bit) {
@@ -35,43 +42,39 @@ class BitStream {
             pos++;
 
             if (pos == 8) { //when we have enough bits to write 1 byte (8 bits), write to the file
-                fso.open(filename, ios::binary | ios::app);
                 fso.write(reinterpret_cast<char*>(&buff), sizeof(buff) * sizeof(char));
-                fso.close();
                 pos = 0;
                 buff = 0;
             }
         }
 
-       void readBit(int n) {
+        void closeFO() {
+            fso.close();
+        }
+
+        void closeFI() {
+            fsi.close();
+        }
+
+       void readBit() {
 
             /**
              * Function used to read one bit at a time from
              * the given file
-             * 
-             * @param n position of the bit we want to read, 
-             * starting at 0
              */
 
-            int cont = 1;
-            fsi.open(filename, ios::in | ios::binary);
-            readBuff = 0;
-
-            while (n > 7) {
-                cont++; //check which byte we'll be reading
-                n = n - 8;
-            }
-
-            for (int j = 0; j < cont; j++) {
+            if (pos2 == 8) {
                 fsi.read(reinterpret_cast<char *>(&readBuff), 1);
+                pos2 = 0;
             }
+
+            cout << "pos: " << pos2 << "\n";
 
             b = bitset<8>(readBuff); //store the byte in a bitset
-            cout << b << "\n";
+            //cout << b << "\n";
 
-            cout << b.to_string()[n] << "\n"; //there has got to be a better way of doing this
-            fsi.close();
-
+            cout << b.to_string()[pos2] << "\n"; //there has got to be a better way of doing this
+            pos2++;
        }
 
        void readNBits(int n) {
@@ -83,9 +86,9 @@ class BitStream {
              * @param n number of bits we want to read, 
              * starting from the first one (index 0)
              */
-
+            pos2 = 0;
             for (int i = 0; i < n; i++) {
-                readBit(i);
+                readBit();
             }
        }
 
