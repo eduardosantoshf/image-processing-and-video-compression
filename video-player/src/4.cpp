@@ -7,44 +7,52 @@ using namespace std;
 int main(void)
 {
 
-    BitStream bs("test.bin");
+    BitStream bsw("test.bin", 'w');
+    /*
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    bsw.writeBit(0);
+    bsw.writeBit(1);
+    bsw.writeBit(0);
+    bsw.writeBit(0);
+
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    bsw.writeBit(0);
+    bsw.writeBit(1);
+    bsw.writeBit(1);
+    */
+
+    BitStream bsr("test.bin", 'r');
     
-    
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(0);
-    bs.writeBit(1);
-    bs.writeBit(0);
-    bs.writeBit(0);
-    
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    bs.writeBit(0);
-    bs.writeBit(1);
-    bs.writeBit(1);
-    
-    bs.readFile();
+    bsr.readFile();
 
     cout << "\n";
 
-    
-    bs.readBit(0);
-    bs.readBit(1);
-    bs.readBit(2);
-    
-    cout << "\n";
- 
-    bs.readNBits(10);
+    cout << "Reading the first 3 bits, individually" << "\n";
+    bsr.readBit();
+    bsr.readBit();
+    bsr.readBit();
 
     cout << "\n";
+    cout << "Reading the first 11 bits" << "\n";
+    
+    bsr.readNBits(11);
 
-    bs.writeNBits(3,6);
+    /*
+    cout << "\n";
 
-    bs.readFile();
+    cout << "Writing int 3 in 6 bits" << "\n";
+    bsw.writeNBits(3,6);
+    bsw.closeFO();
+    */
+
+    bsr.readFile();
+    bsr.closeFI();
 }
 
