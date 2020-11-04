@@ -32,12 +32,19 @@ int main(void)
 
     cout << "\n";
 
+    
     bs.readBit(0);
     bs.readBit(1);
     bs.readBit(2);
     
     cout << "\n";
  
-    bs.readNBits(13);
+    bs.readNBits(10);
+
+    cout << "\n";
+
+    bs.writeNBits(3,6);
+
+    bs.readFile();
 }
 
