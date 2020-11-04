@@ -51,7 +51,7 @@ class BitStream {
              * starting at 0
              */
 
-           int cont = 1;
+            int cont = 1;
             fsi.open(filename, ios::in | ios::binary);
             readBuff = 0;
 
@@ -88,6 +88,16 @@ class BitStream {
        }
 
        void writeNBits(int n, int b) {
+
+           /**
+             * Function used to write N bits at a time from
+             * the given file
+             * 
+             * @param n number we want to be written in binary
+             * @param b how many bits do we want the number n
+             * to be written
+             */
+
             int a[8];
             int i;
             int lengthA = 0;
