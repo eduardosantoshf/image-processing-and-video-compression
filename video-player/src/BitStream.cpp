@@ -88,7 +88,34 @@ class BitStream {
        }
 
        void writeNBits(int n, int b) {
+            int a[8];
+            int i;
+            int lengthA = 0;
+            int surplus = 0;
 
+            for (i = 0; n > 0; i++) {
+                a[i] = n % 2;
+                n = n / 2;
+            }
+
+            cout << "Binary number" << "\n";
+            for (i = i - 1; i >= 0; i--) {
+                cout << a[i];
+                lengthA++;
+            }
+
+            if (b >= lengthA) {
+                surplus = b - lengthA;
+                for (int j = b; j < 8; j++) {
+                    writeBit(0);
+                }
+                for (int k = lengthA; k > 0; k--) {
+                    writeBit(a[k]);
+                }
+                for (int l = 0; l < surplus; l++) {
+                    writeBit(0);
+                }
+            }
        }
 
         void readFile() {
