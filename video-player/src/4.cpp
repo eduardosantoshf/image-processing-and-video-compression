@@ -11,8 +11,8 @@ class BitStream {
         unsigned char buff = 0;
         fstream fsi;
         fstream fso;
+        fstream fsiF;
         unsigned char readBuff = 0;
-        int cont = 1;
         bitset<8> b;
         string filename;
 
@@ -35,6 +35,7 @@ class BitStream {
         }
 
        void readBit(int n) {
+           int cont = 1;
             fsi.open(filename, ios::in | ios::binary);
             readBuff = 0;
 
@@ -56,14 +57,14 @@ class BitStream {
        }
 
         void readFile() {
-            ifstream ifs("test.bin", ios::binary | ios::in);
+            fsiF.open("test.bin", ios::binary | ios::in);
             char c;
-            while (ifs.get(c)) {
+            while (fsiF.get(c)) {
                 for (int i = 7; i >= 0; i--)
                     cout << ((c >> i) & 1);
                     cout << "\n";
             }
-            ifs.close();
+            fsiF.close();
         }
 };
 
@@ -71,8 +72,8 @@ int main(void)
 {
 
     BitStream bs("test.bin");
-    /*
     
+    /*
     bs.writeBit(1);
     bs.writeBit(1);
     bs.writeBit(1);
@@ -93,10 +94,11 @@ int main(void)
     */
     
     bs.readFile();
-    //bs.readBit(11);
 
+    cout << "\n";
     
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 20; i++) {
+        cout << "i: " << i << " ---- ";
         bs.readBit(i);
     }
     
