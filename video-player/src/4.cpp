@@ -34,12 +34,15 @@ int main(void)
 
     cout << "\n";
 
+    /*
     cout << "Reading the first 3 bits, individually" << "\n";
-    bsr.readBit();
-    bsr.readBit();
-    bsr.readBit();
+    cout << bsr.readBit() << "\n";
+    cout << bsr.readBit() << "\n";
+    cout << bsr.readBit() << "\n";
 
     cout << "\n";
+    */
+
     cout << "Reading the first 11 bits" << "\n";
     
     bsr.readNBits(11);
