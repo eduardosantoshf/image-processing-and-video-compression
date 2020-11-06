@@ -56,8 +56,8 @@ class BitStream {
             fsi.close();
         }
 
-       void readBit() {
-
+       int readBit() {
+            char bit;
             /**
              * Function used to read one bit at a time from
              * the given file
@@ -73,12 +73,12 @@ class BitStream {
             b = bitset<8>(readBuff); //store the byte in a bitset
             //cout << b << "\n";
 
-            cout << b.to_string()[pos2] << "\n"; //there has got to be a better way of doing this
+            bit = b.to_string()[pos2];
             pos2++;
+            return bit - '0';
        }
 
        void readNBits(int n) {
-
            /**
              * Function used to read N bits at a time from
              * the given file
@@ -86,9 +86,8 @@ class BitStream {
              * @param n number of bits we want to read, 
              * starting from the first one (index 0)
              */
-            pos2 = 0;
             for (int i = 0; i < n; i++) {
-                readBit();
+                cout << readBit() << "\n";
             }
        }
 
