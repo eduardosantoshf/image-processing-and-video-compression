@@ -7,7 +7,7 @@ using namespace std;
 class BitStream {
     public:
         int pos = 0;
-        int pos2 = 8;
+        int pos2 = 0;
         unsigned char buff = 0;
         fstream fsi;
         fstream fso;
@@ -63,9 +63,9 @@ class BitStream {
              * the given file
              */
 
-            if (pos2 == 8) {
+            if (pos2 == 0) {
                 fsi.read(reinterpret_cast<char *>(&readBuff), 1);
-                pos2 = 0;
+                pos2 = 7;
             }
 
             cout << "pos: " << pos2 << "\n";
@@ -74,7 +74,7 @@ class BitStream {
             //cout << b << "\n";
 
             bit = b.to_string()[pos2];
-            pos2++;
+            pos2--;
             return bit - '0';
        }
 
@@ -113,12 +113,6 @@ class BitStream {
                 n = n / 2;
             }
 
-            cout << "Binary number" << "\n";
-            for (i = i - 1; i >= 0; i--) {
-                cout << a[i];
-                lengthA++;
-            }
-
             cout << "\n";
             cout << "\n";
 
@@ -143,12 +137,12 @@ class BitStream {
              * from the file
              */
 
-            fsiF.open("test.bin", ios::binary | ios::in);
+            fsiF.open(filename, ios::binary | ios::in);
             char c;
 
             //read all the bytes from the binary file
             while (fsiF.get(c)) {
-                for (int i = 7; i >= 0; i--)
+                for (int i = 0; i < 7; i++)
                     cout << ((c >> i) & 1);
                     cout << "\n";
             }
