@@ -142,7 +142,7 @@ class BitStream {
 
             //read all the bytes from the binary file
             while (fsiF.get(c)) {
-                for (int i = 0; i < 7; i++)
+                for (int i = 0; i < 8; i++)
                     cout << ((c >> i) & 1);
                     cout << "\n";
             }
