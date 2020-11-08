@@ -17,7 +17,7 @@ int main(void)
     bsw.writeBit(1);
     bsw.writeBit(0);
     bsw.writeBit(0);
-
+    
     bsw.writeBit(1);
     bsw.writeBit(1);
     bsw.writeBit(1);
@@ -27,6 +27,8 @@ int main(void)
     bsw.writeBit(1);
     bsw.writeBit(1);
     */
+
+    bsw.closeFI();
 
     BitStream bsr("test.bin", 'r');
     
@@ -56,6 +58,5 @@ int main(void)
     */
 
     bsr.readFile();
-    bsr.closeFI();
 }
 
