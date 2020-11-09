@@ -12,9 +12,9 @@ class Golomb {
         int q;
         int r;
 
-        Golomb(string fn, int m, char type) {
+        Golomb(string fn, int m, char encodingType) {
             filename = fn;
-            encodingType = type;
+            this->encodingType = encodingType;
             this->m = m;
         }
 
@@ -30,9 +30,8 @@ class Golomb {
             q = floor(n / m);
             r = n - q * m;
 
-            for (int i = 0; i < q; i++) {
-                encodedNumber.push_back(1);
-            }
+            for (int i = 0; i < q; i++) encodedNumber.push_back(1);
+
             encodedNumber.push_back(0);
 
             bool a[8];
@@ -44,9 +43,7 @@ class Golomb {
                 r = r / 2;
             }
 
-            for (i = i - 1; i >= 0; i--) {
-                encodedNumber.push_back(a[i]);
-            }
+            for (i = i - 1; i >= 0; i--) encodedNumber.push_back(a[i]);
 
             return encodedNumber;
         }
@@ -70,7 +67,9 @@ class Golomb {
             } 
             else {
                 while (encodedNumber.at(i) == 1) i++;
+
                 i--;
+
                 for (int k = i + 1; k < encodedNumber.size(); k++) {
                     v.push_back(encodedNumber.at(k));
                     sbinary += to_string(encodedNumber.at(k));
