@@ -41,13 +41,13 @@ int main(void)
     cout << bsr.readBit() << "\n";
     cout << bsr.readBit() << "\n";
     cout << bsr.readBit() << "\n";
-
-    cout << "\n";
     */
+    cout << "\n";
+    
 
     cout << "Reading the first 11 bits" << "\n";
     
-    bsr.readNBits(11);
+    bsr.readNBits(16);
 
     /*
     cout << "\n";
