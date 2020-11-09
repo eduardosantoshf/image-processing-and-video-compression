@@ -7,7 +7,7 @@ using namespace std;
 class BitStream {
     public:
         int pos = 0;
-        int pos2 = 0;
+        int pos2 = -1;
         unsigned char buff = 0;
         fstream fsi;
         fstream fso;
@@ -63,12 +63,10 @@ class BitStream {
              * the given file
              */
 
-            if (pos2 == 0) {
+            if (pos2 == -1) {
                 fsi.read(reinterpret_cast<char *>(&readBuff), 1);
                 pos2 = 7;
             }
-
-            cout << "pos: " << pos2 << "\n";
 
             b = bitset<8>(readBuff); //store the byte in a bitset
             //cout << b << "\n";
