@@ -12,6 +12,15 @@ class Golomb {
             this->m = m;
         }
 
+        vector<bool> encode(int n) {
+            if (floor(log2(m)) == ceil(log2(m)))
+                return base2Encode(n);
+            else if (n == 0)
+                return truncatedEncode(n);
+            else
+                return truncatedEncode(n);
+        }
+
         vector<bool> base2Encode(int n) {
             /**
              * Function to encode a given number using golomb 
