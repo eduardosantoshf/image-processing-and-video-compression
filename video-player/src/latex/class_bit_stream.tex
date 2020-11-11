@@ -11,7 +11,7 @@ void \mbox{\hyperlink{class_bit_stream_a4d238d7a4337708fd9f06ff85b5514b1}{close\
 \item 
 void \mbox{\hyperlink{class_bit_stream_a86b43c1ff5e42d3cdcd115eef6d7ba99}{close\+FI}} ()
 \item 
-void \mbox{\hyperlink{class_bit_stream_a96882fcd55063fbf225aee0d1dbf7c5f}{read\+Bit}} ()
+int \mbox{\hyperlink{class_bit_stream_a4bebf59fe9379dbdefb4647fdd2ddf01}{read\+Bit}} ()
 \item 
 void \mbox{\hyperlink{class_bit_stream_a6bd23872284616ef322d3d226cc2eec8}{read\+N\+Bits}} (int n)
 \item 
@@ -24,7 +24,7 @@ void \mbox{\hyperlink{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}{read\+
 \item 
 int \mbox{\hyperlink{class_bit_stream_a38a4ee67424234c5e9461d238fbc0649}{pos}} = 0
 \item 
-int \mbox{\hyperlink{class_bit_stream_a277298a885583b5371921cca7c562c88}{pos2}} = 8
+int \mbox{\hyperlink{class_bit_stream_a277298a885583b5371921cca7c562c88}{pos2}} = -\/1
 \item 
 unsigned char \mbox{\hyperlink{class_bit_stream_a8488145b6568c6c0fb63bb1d68351974}{buff}} = 0
 \item 
@@ -66,11 +66,11 @@ char \mbox{\hyperlink{class_bit_stream_aeac51468e7324b95f10122b88c461893}{type}}
 \doxysubsubsection{\texorpdfstring{closeFO()}{closeFO()}}
 {\footnotesize\ttfamily void Bit\+Stream\+::close\+FO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_bit_stream_a96882fcd55063fbf225aee0d1dbf7c5f}\label{class_bit_stream_a96882fcd55063fbf225aee0d1dbf7c5f}} 
+\mbox{\Hypertarget{class_bit_stream_a4bebf59fe9379dbdefb4647fdd2ddf01}\label{class_bit_stream_a4bebf59fe9379dbdefb4647fdd2ddf01}} 
 \index{BitStream@{BitStream}!readBit@{readBit}}
 \index{readBit@{readBit}!BitStream@{BitStream}}
 \doxysubsubsection{\texorpdfstring{readBit()}{readBit()}}
-{\footnotesize\ttfamily void Bit\+Stream\+::read\+Bit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily int Bit\+Stream\+::read\+Bit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 Function used to read one bit at a time from the given file\mbox{\Hypertarget{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}\label{class_bit_stream_aa57e2f09c071d096af20f273934bbdf6}} 
 \index{BitStream@{BitStream}!readFile@{readFile}}
@@ -168,7 +168,7 @@ Function used to write N bits at a time from the given file
 \index{BitStream@{BitStream}!pos2@{pos2}}
 \index{pos2@{pos2}!BitStream@{BitStream}}
 \doxysubsubsection{\texorpdfstring{pos2}{pos2}}
-{\footnotesize\ttfamily int Bit\+Stream\+::pos2 = 8}
+{\footnotesize\ttfamily int Bit\+Stream\+::pos2 = -\/1}
 
 \mbox{\Hypertarget{class_bit_stream_ab1c33115c0a25fa49db5ee13307f4e55}\label{class_bit_stream_ab1c33115c0a25fa49db5ee13307f4e55}} 
 \index{BitStream@{BitStream}!readBuff@{readBuff}}

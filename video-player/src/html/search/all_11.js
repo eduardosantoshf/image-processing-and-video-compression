@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['scharr_5fderivative_59',['scharr_derivative',['../methods_8cpp.html#a97d987936f4902f2ae4e9f97a83c4f59',1,'scharr_derivative(Mat initial_image, int ddepth, int x, int y, int scale, int delta):&#160;methods.cpp'],['../methods_8hpp.html#a1dab37b60884934e550ca9f7a319c11c',1,'scharr_derivative(cv::Mat initial_image, int ddepth, int x, int y, int scale, int delta):&#160;methods.hpp']]],
-  ['sobel_5fderivative_60',['sobel_derivative',['../methods_8cpp.html#a1c5d31c5bda46b03210255682097cf7a',1,'sobel_derivative(Mat initial_image, int ddepth, int x, int y, int ksize, int scale, int delta):&#160;methods.cpp'],['../methods_8hpp.html#ac976642ba3f7d48a3ad9fe4ff483097a',1,'sobel_derivative(cv::Mat initial_image, int ddepth, int x, int y, int ksize, int scale, int delta):&#160;methods.hpp']]],
-  ['src_61',['src',['../2__g_8cpp.html#a1e913916bcdcdedea73cf90ec6381373',1,'src():&#160;2_g.cpp'],['../2__i_8cpp.html#a1e913916bcdcdedea73cf90ec6381373',1,'src():&#160;2_i.cpp']]],
-  ['src_5fgray_62',['src_gray',['../2__i_8cpp.html#a021abc886c1ace1e39e725b8bbaf84ef',1,'2_i.cpp']]]
+  ['ratio2_59',['ratio2',['../2__i_8cpp.html#a811a622df667943b1d53e7c00dfff671',1,'2_i.cpp']]],
+  ['readbit_60',['readBit',['../class_bit_stream.html#a4bebf59fe9379dbdefb4647fdd2ddf01',1,'BitStream']]],
+  ['readbuff_61',['readBuff',['../class_bit_stream.html#ab1c33115c0a25fa49db5ee13307f4e55',1,'BitStream']]],
+  ['readfile_62',['readFile',['../class_bit_stream.html#aa57e2f09c071d096af20f273934bbdf6',1,'BitStream']]],
+  ['readnbits_63',['readNBits',['../class_bit_stream.html#a6bd23872284616ef322d3d226cc2eec8',1,'BitStream']]],
+  ['regular_5fblur_64',['regular_blur',['../methods_8cpp.html#afe1d843f76484893dbb432883fddfb9b',1,'regular_blur(Mat initial_image, int b1, int b2):&#160;methods.cpp'],['../methods_8hpp.html#a4c3f47e711dc2c4f7469758b07c82a7c',1,'regular_blur(cv::Mat initial_image, int b1, int b2):&#160;methods.hpp']]]
 ];

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['window_5fname_65',['window_name',['../2__g_8cpp.html#a644277760c7d66875d7624567494b73c',1,'window_name():&#160;2_g.cpp'],['../2__i_8cpp.html#a644277760c7d66875d7624567494b73c',1,'window_name():&#160;2_i.cpp']]],
-  ['writebit_66',['writeBit',['../class_bit_stream.html#aa86adee7779cf956e70348f392a1a985',1,'BitStream']]],
-  ['writenbits_67',['writeNBits',['../class_bit_stream.html#a5c2ceaa79041ce56d0667921a4756714',1,'BitStream']]]
+  ['threshold_5fimage_69',['threshold_image',['../methods_8cpp.html#af40ec58b7892a815b6f5f0eb52d39898',1,'threshold_image(Mat initial_image, int t_value, int t_type):&#160;methods.cpp'],['../methods_8hpp.html#a323113f97a4162b0cdf0d18f7f1eb2a9',1,'threshold_image(cv::Mat initial_image, int t_value, int t_type):&#160;methods.hpp']]],
+  ['truncateddecode_70',['truncatedDecode',['../class_golomb.html#a85650c80ad07054d1e0a5727d35e6e6a',1,'Golomb']]],
+  ['truncatedencode_71',['truncatedEncode',['../class_golomb.html#a87294e329bbfe8b61564926630fd9a4a',1,'Golomb']]],
+  ['type_72',['type',['../class_bit_stream.html#aeac51468e7324b95f10122b88c461893',1,'BitStream']]]
 ];

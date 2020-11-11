@@ -80,8 +80,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4d238d7a4337708fd9f06ff85b5514b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86b43c1ff5e42d3cdcd115eef6d7ba99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a86b43c1ff5e42d3cdcd115eef6d7ba99">closeFI</a> ()</td></tr>
 <tr class="separator:a86b43c1ff5e42d3cdcd115eef6d7ba99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96882fcd55063fbf225aee0d1dbf7c5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a96882fcd55063fbf225aee0d1dbf7c5f">readBit</a> ()</td></tr>
-<tr class="separator:a96882fcd55063fbf225aee0d1dbf7c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bebf59fe9379dbdefb4647fdd2ddf01"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a4bebf59fe9379dbdefb4647fdd2ddf01">readBit</a> ()</td></tr>
+<tr class="separator:a4bebf59fe9379dbdefb4647fdd2ddf01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bd23872284616ef322d3d226cc2eec8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a6bd23872284616ef322d3d226cc2eec8">readNBits</a> (int n)</td></tr>
 <tr class="separator:a6bd23872284616ef322d3d226cc2eec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c2ceaa79041ce56d0667921a4756714"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a5c2ceaa79041ce56d0667921a4756714">writeNBits</a> (int n, int <a class="el" href="class_bit_stream.html#a7744d1a95fd5a173e1f99f4650becb34">b</a>)</td></tr>
@@ -93,7 +93,7 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a38a4ee67424234c5e9461d238fbc0649"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a38a4ee67424234c5e9461d238fbc0649">pos</a> = 0</td></tr>
 <tr class="separator:a38a4ee67424234c5e9461d238fbc0649"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a277298a885583b5371921cca7c562c88"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a277298a885583b5371921cca7c562c88">pos2</a> = 8</td></tr>
+<tr class="memitem:a277298a885583b5371921cca7c562c88"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a277298a885583b5371921cca7c562c88">pos2</a> = -1</td></tr>
 <tr class="separator:a277298a885583b5371921cca7c562c88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8488145b6568c6c0fb63bb1d68351974"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bit_stream.html#a8488145b6568c6c0fb63bb1d68351974">buff</a> = 0</td></tr>
 <tr class="separator:a8488145b6568c6c0fb63bb1d68351974"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,8 +200,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a96882fcd55063fbf225aee0d1dbf7c5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96882fcd55063fbf225aee0d1dbf7c5f">&#9670;&nbsp;</a></span>readBit()</h2>
+<a id="a4bebf59fe9379dbdefb4647fdd2ddf01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bebf59fe9379dbdefb4647fdd2ddf01">&#9670;&nbsp;</a></span>readBit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -210,7 +210,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BitStream::readBit </td>
+          <td class="memname">int BitStream::readBit </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -468,7 +468,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int BitStream::pos2 = 8</td>
+          <td class="memname">int BitStream::pos2 = -1</td>
         </tr>
       </table>
 </div><div class="memdoc">

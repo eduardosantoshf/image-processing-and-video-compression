@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['gaussian_5fblur_32',['gaussian_blur',['../methods_8cpp.html#a4595e991ec171cbbe418a49e16320ce2',1,'gaussian_blur(Mat initial_image, int k1, int k2):&#160;methods.cpp'],['../methods_8hpp.html#a1b17455e66dcb47c956b4d52aa2372bc',1,'gaussian_blur(cv::Mat initial_image):&#160;methods.hpp']]]
+  ['filename_31',['filename',['../class_bit_stream.html#a7e24579804316d020e02387270b56642',1,'BitStream']]],
+  ['fsi_32',['fsi',['../class_bit_stream.html#ab560f0d604d59e81f14e22733f31837b',1,'BitStream']]],
+  ['fsif_33',['fsiF',['../class_bit_stream.html#a789499b6152e0b753d5b1d7c2ce82217',1,'BitStream']]],
+  ['fso_34',['fso',['../class_bit_stream.html#a14dfa3c326334c535f8e1fe14d0b6ffc',1,'BitStream']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['insert_5fwatermark_34',['insert_watermark',['../methods_8cpp.html#a82c102fdb1ab24dd6b44a45cfaa4ca73',1,'insert_watermark(Mat initial_image, Mat watermark, double beta):&#160;methods.cpp'],['../methods_8hpp.html#acf6225350a6a1759bd5b23ca79e4aaee',1,'insert_watermark(cv::Mat initial_image, cv::Mat watermark, double input):&#160;methods.hpp']]]
+  ['histo_5fequalization_38',['histo_equalization',['../methods_8cpp.html#a5893ba8b7598289cbe6214cd088eb1df',1,'histo_equalization(Mat initial_image):&#160;methods.cpp'],['../methods_8hpp.html#a878b642fadf2e955ed2af2298c7563c6',1,'histo_equalization(cv::Mat initial_image):&#160;methods.hpp']]]
 ];
