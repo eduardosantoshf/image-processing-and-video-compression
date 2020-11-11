@@ -6,19 +6,13 @@ using namespace std;
 
 class Golomb {
     public:
-        string filename;
-        char encodingType;
         int m;
-        int q;
-        int r;
 
-        Golomb(string fn, int m, char encodingType) {
-            filename = fn;
-            this->encodingType = encodingType;
+        Golomb(int m) {
             this->m = m;
         }
 
-        vector<bool> encode(int n) {
+        vector<bool> base2Encode(int n) {
             vector<bool> encodedNumber;
 
             if (n < 0) {
@@ -27,28 +21,92 @@ class Golomb {
             }
             else encodedNumber.push_back(0);
 
-            q = floor(n / m);
-            r = n - q * m;
+            int q = floor(n / m);
+            int r = n - q * m;
 
+            //unary code 
             for (int i = 0; i < q; i++) encodedNumber.push_back(1);
 
             encodedNumber.push_back(0);
 
-            bool a[8];
+            vector<bool> v;
             int i;
 
             //convert r into binary
             for (i = 0; r > 0; i++) {
-                a[i] = r % 2;
+                bool a = r % 2;
+                v.push_back(a);
                 r = r / 2;
             }
 
-            for (i = i - 1; i >= 0; i--) encodedNumber.push_back(a[i]);
+            for (i = i - 1; i >= 0; i--) encodedNumber.push_back(v.at(i));
 
             return encodedNumber;
         }
 
-        int decode(vector<bool> encodedNumber) {
+        /*
+        vector<bool> truncatedEncode(int n) {
+            int b = ceil(log2(m));
+
+            int q = floor(n / m);
+            int r = n - q * m;
+
+            vector<bool> encodedNumber;
+
+            if (n < 0) {
+                encodedNumber.push_back(1);
+                n = abs(n);
+            }
+            else encodedNumber.push_back(0);
+            
+            //unary code
+            for (int i = 0; i < q; i++) encodedNumber.push_back(1);
+
+            //binary code
+            if (r < (pow(2, b) - m)) {
+                vector<bool> v;
+                int bits = b - 1;
+                int num = r;
+                int j;
+
+                for (j = 0; num > 0; j++) {
+                    bool a = num % 2;
+                    v.push_back(a);
+                    num = num / 2;
+                }
+
+                while (v.size() < bits) v.push_back(0);
+
+                reverse(v.begin(), v.end());
+
+                for (int o = 0; o < v.size(); o++) encodedNumber.push_back(v.at(o));
+
+            }
+            else {
+                vector<bool> v2;
+                int bits2 = b;
+                int num2 = r + pow(2, b);
+                int k;
+
+                for (k = 0; num2 > 0; k++) {
+                    bool a = num2 % 2;
+                    v2.push_back(a);
+                    num2 = num2 / 2;
+                }
+
+                while (v2.size() < bits2) v2.push_back(0);
+
+                reverse(v2.begin(), v2.end());
+
+                for (int o = 0; o < v2.size(); o++) encodedNumber.push_back(v2.at(o));
+            }
+
+            return encodedNumber;   
+        }
+        */
+        
+
+        int base2Decode(vector<bool> encodedNumber) {
             bool signal = encodedNumber.at(0);
 
             int i = 1;
