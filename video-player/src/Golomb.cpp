@@ -13,6 +13,13 @@ class Golomb {
         }
 
         vector<bool> base2Encode(int n) {
+            /**
+             * Function to encode a given number using golomb 
+             * coding, given a parameter m, power of 2
+             * 
+             * @param n number we want to encode
+             * @return encoded number, stored in a vector
+             */
             vector<bool> encodedNumber;
 
             if (n < 0) {
@@ -45,6 +52,15 @@ class Golomb {
         }
         
         int base2Decode(vector<bool> encodedNumber) {
+            /**
+             * Function to decode a given number using 
+             * golomb coding, given a parameter m, 
+             * power of 2
+             * 
+             * @param encodedNumber number we want to decode, stored
+             * in a vector
+             * @return decoded number
+             */
             bool signal = encodedNumber.at(0);
 
             int i = 1;
@@ -84,6 +100,13 @@ class Golomb {
         }
 
         vector<bool> truncatedEncode(int n) {
+            /**
+             * Function to encode a given number using golomb 
+             * coding, given a parameter m, not power of 2
+             * 
+             * @param n number we want to encode
+             * @return encoded number, stored in a vector
+             */
             int b = ceil(log2(m));
 
             vector<bool> encodedNumber;
@@ -145,6 +168,15 @@ class Golomb {
         }
 
         int truncatedDecode(vector<bool> encodedNumber) {
+            /**
+             * Function to decode a given number using 
+             * golomb coding, given a parameter m, 
+             * not power of 2
+             * 
+             * @param encodedNumber number we want to decode, stored
+             * in a vector
+             * @return decoded number
+             */
             int b = ceil(log2(m));
             int q, r, i = 1;
             string sbinary = "";
@@ -161,7 +193,6 @@ class Golomb {
             }
             else {
                 while (encodedNumber.at(i) == 1) i++;
-
                 i--;
 
                 for (int k = i + 1; k < encodedNumber.size(); k++) {
@@ -174,6 +205,7 @@ class Golomb {
             //convert r from binary to decimal
             r = stoi(sbinary, 0, 2);
 
+            //check if number is positive | negative
             if (encodedNumber.at(0) == 0)
                 signal = 1;
             else
