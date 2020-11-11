@@ -9,6 +9,9 @@ int main(void)
     Golomb golomb(2);
     Golomb g2(2);
     Golomb g4(4);
+    Golomb g5(5);
+
+    //-------------------- m = 2 --------------------//
 
     vector<bool> g2_1 = g2.base2Encode(10);
     vector<bool> g2_2 = g2.base2Encode(-3);
@@ -48,6 +51,8 @@ int main(void)
     cout << "\n";
     cout << "\n";
 
+    //-------------------- m = 4 --------------------//
+
     vector<bool> g4_1 = g4.base2Encode(10);
     vector<bool> g4_2 = g4.base2Encode(-3);
     vector<bool> g4_3 = g4.base2Encode(27);
@@ -84,9 +89,49 @@ int main(void)
     cout << ": " << g4.base2Decode(g4_5) << "\n";
 
     cout << "\n";
-    
+    cout << "\n";
 
+    //-------------------- m = 5 --------------------//
+
+    vector<bool> g5_1 = g5.truncatedEncode(10);
+    vector<bool> g5_2 = g5.truncatedEncode(-3);
+    vector<bool> g5_3 = g5.truncatedEncode(27);
+    vector<bool> g5_4 = g5.truncatedEncode(-15);
+    vector<bool> g5_5 = g5.truncatedEncode(19);
     
+    cout << "Encoding numbers for m = 5 (First bit represents signal: 0 - positive; 1 - negative) ..." << "\n";
+
+    cout << "10: ";
+    for (int c = 0; c < g5_1.size(); c++) cout << g5_1.at(c);
+    cout << "\n" << "-3: ";
+    for (int c = 0; c < g5_2.size(); c++) cout << g5_2.at(c);
+    cout << "\n" << "27: ";
+    for (int c = 0; c < g5_3.size(); c++) cout << g5_3.at(c);
+    cout << "\n" << "-15: ";
+    for (int c = 0; c < g5_4.size(); c++) cout << g5_4.at(c);
+    cout << "\n" << "19: ";
+    for (int c = 0; c < g5_5.size(); c++) cout << g5_5.at(c);
+    
+    cout << "\n";
+    cout << "\n";
+
+    cout << "Decoding numbers ..." << "\n";
+
+    for (int c = 0; c < g5_1.size(); c++) cout << g5_1.at(c);
+    cout << ": " << g5.truncatedDecode(g5_1) << "\n";
+    for (int c = 0; c < g5_2.size(); c++) cout << g5_2.at(c);
+    cout << ": " << g5.truncatedDecode(g5_2) << "\n";
+    for (int c = 0; c < g5_3.size(); c++) cout << g5_3.at(c);
+    cout << ": " << g5.truncatedDecode(g5_3) << "\n";
+    for (int c = 0; c < g5_4.size(); c++) cout << g5_4.at(c);
+    cout << ": " << g5.truncatedDecode(g5_4) << "\n";
+    for (int c = 0; c < g5_5.size(); c++) cout << g5_5.at(c);
+    cout << ": " << g5.truncatedDecode(g5_5) << "\n";
+
+    cout << "\n";
+    cout << "\n";
+
+
     cout << "/----- Working with binary file, using BitStream class -----/" << "\n" << "\n";
 
 
