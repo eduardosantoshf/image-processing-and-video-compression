@@ -44,7 +44,7 @@ class Golomb {
             return encodedNumber;
         }
 
-        /*
+        
         vector<bool> truncatedEncode(int n) {
             int b = ceil(log2(m));
 
@@ -62,6 +62,8 @@ class Golomb {
             //unary code
             for (int i = 0; i < q; i++) encodedNumber.push_back(1);
 
+            encodedNumber.push_back(0);
+
             //binary code
             if (r < (pow(2, b) - m)) {
                 vector<bool> v;
@@ -69,41 +71,43 @@ class Golomb {
                 int num = r;
                 int j;
 
+                //transform num into binary
                 for (j = 0; num > 0; j++) {
                     bool a = num % 2;
                     v.push_back(a);
+                    cout << a << "\n";
                     num = num / 2;
                 }
 
+                //add 0s to binary number
                 while (v.size() < bits) v.push_back(0);
 
-                reverse(v.begin(), v.end());
-
-                for (int o = 0; o < v.size(); o++) encodedNumber.push_back(v.at(o));
+                for (int o = v.size() - 1; o >= 0; o--) encodedNumber.push_back(v.at(o));
 
             }
             else {
                 vector<bool> v2;
                 int bits2 = b;
-                int num2 = r + pow(2, b);
+                int num2 = r + pow(2, b) - m;
                 int k;
 
+                //transform num2 into binary
                 for (k = 0; num2 > 0; k++) {
                     bool a = num2 % 2;
                     v2.push_back(a);
+                    cout << a << "\n";
                     num2 = num2 / 2;
                 }
 
+                //add 0s to binary number
                 while (v2.size() < bits2) v2.push_back(0);
 
-                reverse(v2.begin(), v2.end());
-
-                for (int o = 0; o < v2.size(); o++) encodedNumber.push_back(v2.at(o));
+                for (int o = v2.size() - 1; o >= 0; o--) encodedNumber.push_back(v2.at(o));
             }
 
             return encodedNumber;   
         }
-        */
+        
         
 
         int base2Decode(vector<bool> encodedNumber) {
