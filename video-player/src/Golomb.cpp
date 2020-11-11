@@ -21,6 +21,13 @@ class Golomb {
                 return truncatedEncode(n);
         }
 
+        int decode(vector<bool> encodedNumber) {
+            if (floor(log2(m)) == ceil(log2(m)))
+                return base2Decode(encodedNumber);
+            else
+                return truncatedDecode(encodedNumber);
+        }
+
         vector<bool> base2Encode(int n) {
             /**
              * Function to encode a given number using golomb 
