@@ -1,15 +1,13 @@
 #include "Golomb.cpp"
-#include "BitStream.cpp"
 #include <vector>
 
 using namespace std;
 
 int main(void) 
 {
-    Golomb golomb(2);
-    Golomb g2(2);
-    Golomb g4(4);
-    Golomb g5(5);
+    Golomb g2("golomb.bin", 2, 'e');
+    Golomb g4("golomb.bin", 4, 'e');
+    Golomb g5("golomb.bin", 5, 'e');
 
     //-------------------- m = 2 --------------------//
 
@@ -35,6 +33,7 @@ int main(void)
     cout << "\n";
     cout << "\n";
 
+    /*
     cout << "Decoding numbers ..." << "\n";
 
     for (int c = 0; c < g2_1.size(); c++) cout << g2_1.at(c);
@@ -50,6 +49,7 @@ int main(void)
 
     cout << "\n";
     cout << "\n";
+    */
 
     //-------------------- m = 4 --------------------//
 
@@ -75,6 +75,7 @@ int main(void)
     cout << "\n";
     cout << "\n";
 
+    /*
     cout << "Decoding numbers ..." << "\n";
 
     for (int c = 0; c < g4_1.size(); c++) cout << g4_1.at(c);
@@ -90,6 +91,7 @@ int main(void)
 
     cout << "\n";
     cout << "\n";
+    */
 
     //-------------------- m = 5 --------------------//
 
@@ -115,6 +117,7 @@ int main(void)
     cout << "\n";
     cout << "\n";
 
+    /*
     cout << "Decoding numbers ..." << "\n";
 
     for (int c = 0; c < g5_1.size(); c++) cout << g5_1.at(c);
@@ -130,68 +133,15 @@ int main(void)
 
     cout << "\n";
     cout << "\n";
+    */
 
+   g2.close();
+   g4.close();
+   g5.close();
 
-    cout << "/----- Working with binary file, using BitStream class -----/" << "\n" << "\n";
-
-    vector<bool> v = golomb.encode(13);
-    vector<bool> v2 = golomb.encode(-10);
-    int i;
-    int i2;
-
-    cout << "encoded number: ";
-    for (i = 0; i < v.size(); i++) {
-        cout << v.at(i);
-    }
-    cout << "\n" << "decoded number: " << golomb.decode(v) << "\n";
-    cout << "\n" << "Writing number on file..." << "\n";
-    cout << "\n";
-
-    cout << "encoded number: ";
-    for (i2 = 0; i2 < v2.size(); i2++) {
-        cout << v2.at(i2);
-    }
-    cout << "\n" << "decoded number: " << golomb.decode(v2) << "\n";
-    cout << "\n" << "Writing number on file..." << "\n";
-
-    BitStream bsw("testGolomb.bin", 'w');
-
-    for (int j = 0; j < v.size(); j++) {
-        //bsw.writeBit(v.at(j));
-    }
-
-    for (int k = 0; k < v2.size(); k++) {
-        //bsw.writeBit(v2.at(k));
-    }
-
-    bsw.closeFO();
-
-    BitStream bsr("testGolomb.bin", 'r');
-
-    cout << "\n";
-
-    cout << "File content:" << "\n";
-    bsr.readFile();
-
-    cout << "\n" << "Reading and decoding first number from file..." << "\n";
-
-    vector<bool> d;
-
-    for (int l = 0; l < i; l++) {
-        d.push_back(bsr.readBit());
-    }
-    cout << "First decoded number: " << golomb.decode(d) << "\n";
-
-    vector<bool> d2;
-
-    for (int m = 0; m < i2; m++) {
-        d2.push_back(bsr.readBit());
-    }
-    cout << "Second decoded number: " << golomb.decode(d2) << "\n";
-
-    for (int s = 0; s < 17; s++) {
-        //cout << bsr.readBit();
-    }
+   BitStream bsr("golomb.bin", 'r');
+    
+    bsr.readNBits(65);
 
     bsr.closeFI();
 
