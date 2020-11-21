@@ -20,22 +20,15 @@
 
 using namespace std;
 
-/*! Golomb code class */
 class Golomb {
 	private:
-		int m/*! Paramter m for the Glomb code */;
-		int flag/*! Flag to signal if we are reading or writing */;
-		RBitStream* rbs/*! Reading BitStream */;
-		WBitStream* wbs/*! Writing BitStream */;
+		int m;
+		int flag;
+		RBitStream* rbs;
+		WBitStream* wbs;
 		
 	public: 
-	
-	   	//! A constructor, Initiates the type of BitStream considering the flag, and atributes value to the class atributes
-	    /*!
-	      \param file A string with the name of the file
-	      \param M Parameter m for the golomb code
-	      \param Flag Flag to signal if we are reading(0) or Writing(1)
-	    */
+
 	   	Golomb(string file, int M, int Flag){
 	   		if(Flag == 0){
 	   			rbs = new RBitStream(file);
@@ -45,11 +38,7 @@ class Golomb {
 	   		m = M;
 	   		flag = Flag;
 	   	}
-	   	
-	   	//! Encode de number passed as a parameter, calculating the quotient and the remainder and ecoding inunary and binary respectively depending on the value of m
-	    /*!
-	      \param n The number to encode
-	    */
+
 	   	void encode(int n){
 	   		int sign = 0;
 		   	if (n <0){
@@ -77,20 +66,15 @@ class Golomb {
 		   		unsigned char tr = (unsigned char) r;
 		   		if (r < pow(2,b) - m){
 		   			wbs->writeNBits(r,b-1);
-		   			//for (int i = 7 -(7-(b-1)) -1 ; i != -1 ; i--) {
-					//	wbs->writeBit((int)((tr & (1 << i)) != 0));
-					//}	
+
 		   		} else {
 		   		int bigger_r = r + pow(2,b)-m;
 		   		unsigned char br = (unsigned char) bigger_r;
 		   			wbs->writeNBits(bigger_r,b);
-		   			//for (int i = 7 -(7-b) -1 ; i != -1 ; i--) {
-					//	wbs->writeBit((int)((br & (1 << i)) != 0));
-					//}	
 		   		}
 	   		}
 	   	}
-	   	//! Decode a number from the file passed, first we read 0 bits until we find a bit with the value of 1, the number of 0's is the quotient, secondly we read NBits from the file with N being the log2(m), lastly return the value of the integer decoded, this is not true when m is not a power of 2 since we need to do some more calculations
+
 	   	int decode(){
 	   		int sign = rbs->readBit();
 	   		int bit = rbs->readBit();
@@ -129,14 +113,12 @@ class Golomb {
 	  		}
 	   	}
 	   	
-	   	//! simply close the write stream considering we mingh not encode a number of bits multiple of 8
 	   	void close(){
 	   		if (flag == 1){
 	   			wbs->close();
 	   		}
 	   	}
 	   	
-	   	//! Needed a function to when i dont want to start the decoding from the start, this one offsets the start of the golomb decoding by N bytes
 	   	void SkipNBytes(int n){
 	   		int temp = 0;
 	   		for (int i = 0; i < n; i++){
