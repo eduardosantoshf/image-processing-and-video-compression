@@ -1,15 +1,3 @@
-/*! \file Golomb.cpp
- *	\brief Class to encode and decode Golomb code
- *	      
- *	
- *
- *	
- *  
- *	Press ESC to exit.
- *
- */
-
-
 #include <iostream>
 #include <stdio.h>
 #include <fstream> 
