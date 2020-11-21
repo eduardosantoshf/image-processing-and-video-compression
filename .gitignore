@@ -6,3 +6,5 @@ VideoPlayer
 Makefile
 CMakeCache.txt
 test.bin
+video-player/.idea/
+video-player/src/Golomb
