@@ -3,6 +3,7 @@
 #include "Golomb2.cpp"
 
 using namespace std;
+using namespace cv;
 
 class Predictor {
     private:
@@ -17,7 +18,7 @@ class Predictor {
         WBitStream *wbs;
     
     public:
-        Predictor(string filename, int videoFormat, int predictorType, int m, int framesNumber) {
+        Predictor(string filename, int videoFormat, int predictorType, int m, int framesNumber, int codingType) {
             if (codingType == 1) {
                 this->videoFormat = videoFormat;
                 this->predictorType = predictorType;
@@ -68,8 +69,8 @@ class Predictor {
         }
 
         void encodeJPEG1(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -79,7 +80,7 @@ class Predictor {
             for (int l = 0; l < lines; l++) {
                 for (int c = 0; c < columns; c++) {
                     if ((c - 1) >= 0)
-                        a = (int) frame.at<uchar>(l, c - 1)
+                        a = (int) frame.at<uchar>(l, c - 1);
                     else
                         a = 0;
 
@@ -91,8 +92,8 @@ class Predictor {
         }
 
         void encodeJPEG2(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -114,8 +115,8 @@ class Predictor {
         }
 
         void encodeJPEG3(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -137,8 +138,8 @@ class Predictor {
         }
 
         void encodeJPEG4(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -172,8 +173,8 @@ class Predictor {
         }
 
         void encodeJPEG5(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -207,8 +208,8 @@ class Predictor {
         }
 
         void encodeJPEG6(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -242,8 +243,8 @@ class Predictor {
         }
 
         void encodeJPEG7(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -271,8 +272,8 @@ class Predictor {
         }
 
         void encodeJPEGLS(Mat frame) {
-            int lines = f.rows;
-            int columns = f.cols;
+            int lines = frame.rows;
+            int columns = frame.cols;
 
             writeFrameSize(lines, columns, frame);
 
@@ -315,7 +316,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((w - 1) >= 0)
                         a = (int) decodedFrame.at<uchar>(h, w - 1);
@@ -335,7 +336,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((h - 1) >= 0)
                         b = (int) decodedFrame.at<uchar>(h - 1, w);
@@ -355,7 +356,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((h - 1) >= 0 && (w - 1) >= 0)
                         c = (int) decodedFrame.at<uchar>(h - 1, w - 1);
@@ -375,7 +376,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((w - 1) >= 0)
                         a = (int) decodedFrame.at<uchar>(h, w - 1);
@@ -394,7 +395,7 @@ class Predictor {
                     
                     int v = golomb->decode();
 
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) ((a + b - z) + v);
+                    decodedFrame.at<uchar>(h, w) = (unsigned char) ((a + b - c) + v);
                 }
             }
             return decodedFrame;
@@ -405,7 +406,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((w - 1) >= 0)
                         a = (int) decodedFrame.at<uchar>(h, w - 1);
@@ -435,7 +436,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((w - 1) >= 0)
                         a = (int) decodedFrame.at<uchar>(h, w - 1);
@@ -465,7 +466,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((w - 1) >= 0)
                         a = (int) decodedFrame.at<uchar>(h, w - 1);
@@ -490,7 +491,7 @@ class Predictor {
 
             Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < heigth; h++) {
+            for (int h = 0; h < height; h++) {
                 for (int w = 0; w < width; w++) {
                     if ((w - 1) >= 0)
                         a = (int) decodedFrame.at<uchar>(h, w - 1);
