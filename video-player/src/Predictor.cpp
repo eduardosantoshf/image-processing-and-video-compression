@@ -12,16 +12,16 @@ class Predictor {
         int height;
         int width;
         bool flag = 1;
-        string videoFormat;
+        int videoFormat;
         Golomb *golomb;
         WBitStream *wbs;
     
     public:
-        Predictor(int predictorType, int m, string filename, int videoFormat, int framesNumber, int codingType) {
+        Predictor(string filename, int videoFormat, int predictorType, int m, int framesNumber) {
             if (codingType == 1) {
+                this->videoFormat = videoFormat;
                 this->predictorType = predictorType;
                 this->m = m;
-                this->videoFormat = videoFormat;
                 this->framesNumber = framesNumber;
 
                 golomb = new Golomb(filename, m, 1);
@@ -57,6 +57,14 @@ class Predictor {
                 golomb->SkipNBytes(15);
             }
             
+        }
+
+        int getFramesNumber() {
+            return framesNumber;
+        }
+
+        int getPredictorType() {
+            return predictorType;
         }
 
         void encodeJPEG1(Mat frame) {
