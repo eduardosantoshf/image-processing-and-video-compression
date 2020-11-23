@@ -1,74 +1,74 @@
-#include<iostream>
-#include<opencv2/opencv.hpp>
+#include "opencv2/opencv.hpp"
+#include <iostream>
+#include <vector>
 #include "Golomb2.cpp"
 
-using namespace std;
 using namespace cv;
+using namespace std;
 
 class Predictor {
-    private:
-        int m;
-        int predictorType;
-        int framesNumber;
-        int height;
-        int width;
-        bool flag = 1;
-        int videoFormat;
-        Golomb *golomb;
-        WBitStream *wbs;
-    
-    public:
-        Predictor(string filename, int videoFormat, int predictorType, int m, int framesNumber, int codingType) {
-            if (codingType == 1) {
-                this->videoFormat = videoFormat;
-                this->predictorType = predictorType;
-                this->m = m;
-                this->framesNumber = framesNumber;
+	private:
+		int m;
+		int predictorType;
+		int videoFormat;
+		int framesNumber;
+		int height;
+		int width;
+		int flag;
+		Golomb *golomb;
+		WBitStream *wbs;
 
-                golomb = new Golomb(filename, m, 1);
-                
-                wbs = new WBitStream(filename);
-                wbs->writeNBits(videoFormat, 8);
-                wbs->writeNBits(predictorType, 8);
-                wbs->writeNBits(m, 8);
-            }
-            else {
-                RBitStream rbs(filename);
-                this->videoFormat = rbs.readNBits(8);
-                cout << "Video format: " << this->videoFormat << endl;
+	public: 
+	   	Predictor(string filename, int vt, int pt, int mValue, int fn, int flag2){
+	   		if (flag2 == 1){
+		   		m = mValue;
+		   		predictorType = pt;
+		   		videoFormat = vt;
+		   		golomb = new Golomb(filename, m, 1);
+		   		flag = 1;
+		   		framesNumber = fn;
 
-                this->predictorType = rbs.readNBits(8);
-                cout << "Predictor type: " << this->predictorType << endl;
+		   		wbs = new WBitStream(filename);
+		   		wbs->writeNBits(videoFormat,8);
+		   		wbs->writeNBits(predictorType, 8);
+		   		wbs->writeNBits(m, 8);
+		   	}else{
+		   		RBitStream rbs(filename);
 
-                this->m = rbs.readNBits(8);
-                cout << "Value of m used: " << this->m << endl;
+		   		videoFormat = rbs.readNBits(8);
+                cout << "Type video: " << videoFormat << endl;
 
-                this->height = stoi(rbs.readString(4));
-                cout << "Height: " << this->height << endl;
+		   		predictorType = rbs.readNBits(8);
+                cout << "Type : " << predictorType << endl;
 
-                this->width = stoi(rbs.readString(4));
-                cout << "Width: " << this->width << endl;
+		   		m = rbs.readNBits(8);
+                cout << "m: " << m << endl;
 
-                this->framesNumber = stoi(rbs.readString(4));
-                cout << "Number of frames: " << this->framesNumber << endl;
+		   		width = stoi(rbs.readString(4));
+                cout << "width: " << width << endl;
 
-                rbs.close();
+		   		height = stoi(rbs.readString(4));
+                cout << "height: " << height<< endl;
 
-                golomb = new Golomb(filename, m, 0);
-                golomb->SkipNBytes(15);
-            }
-            
-        }
+		   		framesNumber = stoi(rbs.readString(4));
+                cout << "framesNumber: " << framesNumber<< endl;
 
-        int getFramesNumber() {
+		   		rbs.close();
+
+		   		golomb = new Golomb(filename, m, 0);
+				golomb->SkipNBytes(15);
+		   	}
+	   	}
+	   	
+        int getFramesNumber(){
             return framesNumber;
         }
-
-        int getPredictorType() {
+        
+        int getPredictorType(){
             return predictorType;
         }
-
-        void encodeJPEG1(Mat frame) {
+	    	
+	    void encodeJPEG1(Mat frame) {
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -90,7 +90,7 @@ class Predictor {
                 }
             }
         }
-
+        
         void encodeJPEG2(Mat frame) {
             int lines = frame.rows;
             int columns = frame.cols;
@@ -310,219 +310,237 @@ class Predictor {
                 }
             }
         }
+	   	
+	   	Mat decodeJPEG1(){
+	   		Mat decodedFrame(height, width, 0);
 
-        Mat decodeJPEG1() {
             int a;
 
-            Mat decodedFrame(height, width, 0);
+			for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if((c - 1) >= 0){
+						a = (int) decodedFrame.at<uchar>(l, c - 1);
+					}
+                    else{
+						a = 0;
+					}
+					int d = golomb->decode();
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a);				
+				}
+			}
+			return decodedFrame;
+	   	}
+	   	
+	   	Mat decodeJPEG2(){
+	   		Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((w - 1) >= 0)
-                        a = (int) decodedFrame.at<uchar>(h, w - 1);
-                    else
-                        a = 0;
-                    
-                    int v = golomb->decode();
-
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) (a + v);
-                }
-            }
-            return decodedFrame;
-        }
-
-        Mat decodeJPEG2() {
             int b;
+			
+            for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if (l - 1 >= 0){
+						b = (int) decodedFrame.at<uchar>(l - 1,c);
+					}
+                    else{
+						b = 0;
+					}
 
-            Mat decodedFrame(height, width, 0);
+					int d = golomb->decode();
 
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((h - 1) >= 0)
-                        b = (int) decodedFrame.at<uchar>(h - 1, w);
-                    else
-                        b = 0;
-                    
-                    int v = golomb->decode();
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + b);			
+				}
+			}
+			return decodedFrame;
+	   	}
+	   	
+	   	Mat decodeJPEG3(){
+	   		Mat decodedFrame(height, width, 0);
 
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) (b + v);
-                }
-            }
-            return decodedFrame;
-        }
-
-        Mat decodeJPEG3() {
             int c;
 
-            Mat decodedFrame(height, width, 0);
+			for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if ((l - 1) >= 0 && (c - 1) >= 0){
+						c = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					}
+                    else{
+						c = 0;
+					}
+					int d = golomb->decode();
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + c);		
+				}
+			}
+			return decodedFrame;
+	   	}
+	   	
+	   	Mat decodeJPEG4(){
+	   		Mat decodedFrame(height, width, 0);
 
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((h - 1) >= 0 && (w - 1) >= 0)
-                        c = (int) decodedFrame.at<uchar>(h - 1, w - 1);
-                    else
-                        c = 0;
-                    
-                    int v = golomb->decode();
+			int a, b, c2;
 
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) (c + v);
-                }
-            }
-            return decodedFrame;
-        }
+			for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if ((c - 1) >= 0){
+						a = (int) decodedFrame.at<uchar>(l, c - 1);
+					}
+                    else {
+						a = 0;
+					}
+					if ((l - 1) >= 0){
+						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					}
+                    else {
+						b = 0;
+					}
+					if ((l - 1) >= 0 && (c - 1) >= 0){
+						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					}
+                    else {
+						c2 = 0;
+					}
 
-        Mat decodeJPEG4() {
-            int a, b, c;
+					int d = golomb->decode();
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a + b - c2);
+				}
+			}
+			return decodedFrame;
+	   	}
+	   	
+	   	Mat decodeJPEG5(){
+	   		Mat decodedFrame(height, width, 0);
 
-            Mat decodedFrame(height, width, 0);
+			int a, b, c2;
 
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((w - 1) >= 0)
-                        a = (int) decodedFrame.at<uchar>(h, w - 1);
-                    else
-                        a = 0;
-                    
-                    if ((h - 1) >= 0)
-                        b = (int) decodedFrame.at<uchar>(h - 1, w);
-                    else
-                        b = 0;
-                    
-                    if ((h - 1) >= 0 && (w - 1) >= 0)
-                        c = (int) decodedFrame.at<uchar>(h - 1, w - 1);
-                    else
-                        c = 0;
-                    
-                    int v = golomb->decode();
+			for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if ((c - 1) >= 0){
+						a = (int) decodedFrame.at<uchar>(l, c - 1);
+					}
+                    else {
+						a = 0;
+					}
+					if ((l - 1) >= 0){
+						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					}
+                    else {
+						b = 0;
+					}
+					if ((l - 1) >= 0 && (c - 1) >= 0){
+						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					}
+                    else {
+						c2 = 0;
+					}
 
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) ((a + b - c) + v);
-                }
-            }
-            return decodedFrame;
-        }
+					int d = golomb->decode();
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a + (b - c2)/2);
+				}
+			}
+			return decodedFrame;
+	   	}
+	   	
+	   	Mat decodeJPEG6(){
+	   		Mat decodedFrame(height, width, 0);
 
-        Mat decodeJPEG5() {
-            int a, b, c;
+			int a, b, c2;
 
-            Mat decodedFrame(height, width, 0);
+			for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if ((c - 1) >= 0){
+						a = (int) decodedFrame.at<uchar>(l, c - 1);
+					}
+                    else {
+						a = 0;
+					}
+					if ((l - 1) >= 0){
+						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					}
+                    else {
+						b = 0;
+					}
+					if ((l - 1) >= 0 && (c - 1) >= 0){
+						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					}
+                    else {
+						c2 = 0;
+					}
 
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((w - 1) >= 0)
-                        a = (int) decodedFrame.at<uchar>(h, w - 1);
-                    else
-                        a = 0;
-                    
-                    if ((h - 1) >= 0)
-                        b = (int) decodedFrame.at<uchar>(h - 1, w);
-                    else
-                        b = 0;
-                    
-                    if ((h - 1) >= 0 && (w - 1) >= 0)
-                        c = (int) decodedFrame.at<uchar>(h - 1, w - 1);
-                    else
-                        c = 0;
-                    
-                    int v = golomb->decode();
+					int d = golomb->decode();
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + b + (a - c2)/2);
+				}
+			}
+			return decodedFrame;
+	   	}
+	   	
+	   	Mat decodeJPEG7(){
+	   		Mat decodedFrame(height, width, 0);
 
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) ((a + ((b - c) / 2)) + v);
-                }
-            }
-            return decodedFrame;
-        }
+			int a, b;
 
-        Mat decodeJPEG6() {
-            int a, b, c;
+			for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if ((c - 1) >= 0){
+						a = (int) decodedFrame.at<uchar>(l, c - 1);
+					}
+                    else {
+						a = 0;
+					}
+					if ((l - 1) >= 0){
+						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					}
+                    else {
+						b = 0;
+					}
+					int d = golomb->decode();
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + (a + b)/2);
+				}
+			}
+			return decodedFrame;
+	   	}
+	   	
+	   	Mat decodeJPEGLS(){
+	   		Mat decodedFrame(height, width, 0);
 
-            Mat decodedFrame(height, width, 0);
+			int a, b, c2;
 
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((w - 1) >= 0)
-                        a = (int) decodedFrame.at<uchar>(h, w - 1);
-                    else
-                        a = 0;
-                    
-                    if ((h - 1) >= 0)
-                        b = (int) decodedFrame.at<uchar>(h - 1, w);
-                    else
-                        b = 0;
-                    
-                    if ((h - 1) >= 0 && (w - 1) >= 0)
-                        c = (int) decodedFrame.at<uchar>(h - 1, w - 1);
-                    else
-                        c = 0;
-                    
-                    int v = golomb->decode();
+			for (int l = 0; l < height; l++){
+				for (int c = 0; c < width; c++){
+					if ((c - 1) >= 0){
+						a = (int) decodedFrame.at<uchar>(l, c - 1);
+					}
+                    else {
+						a = 0;
+					}
+					if ((l - 1) >= 0){
+						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					}
+                    else {
+						b = 0;
+					}
+                    if ((l - 1) >= 0 && (c - 1) >= 0){
+						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					}
+                    else {
+						c2 = 0;
+					}
 
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) ((b + ((a - c) / 2)) + v);
-                }
-            }
-            return decodedFrame;
-        }
+                    int d = golomb->decode();
 
-        Mat decodeJPEG7() {
-            int a, b;
+					if (c2 >= max(a,b)) {
+						decodedFrame.at<uchar>(l, c) = (unsigned char) (d + min(a, b));					
+					} else if (c2 <= min(a,b)) {
+						decodedFrame.at<uchar>(l, c) = (unsigned char) (d + max(a, b));	
+					} else {
+						decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a + b - c2);
+					}
+				}
+			}
+			return decodedFrame;
+	   	}
 
-            Mat decodedFrame(height, width, 0);
-
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((w - 1) >= 0)
-                        a = (int) decodedFrame.at<uchar>(h, w - 1);
-                    else
-                        a = 0;
-                    
-                    if ((h - 1) >= 0)
-                        b = (int) decodedFrame.at<uchar>(h - 1, w);
-                    else
-                        b = 0;
-                    
-                    int v = golomb->decode();
-
-                    decodedFrame.at<uchar>(h, w) = (unsigned char) (((a + b) / 2) + v);
-                }
-            }
-            return decodedFrame;
-        }
-
-        Mat decodeJPEGLS() {
-            int a, b, c;
-
-            Mat decodedFrame(height, width, 0);
-
-            for (int h = 0; h < height; h++) {
-                for (int w = 0; w < width; w++) {
-                    if ((w - 1) >= 0)
-                        a = (int) decodedFrame.at<uchar>(h, w - 1);
-                    else
-                        a = 0;
-                    
-                    if ((h - 1) >= 0)
-                        b = (int) decodedFrame.at<uchar>(h - 1, w);
-                    else
-                        b = 0;
-                    
-                    if ((h - 1) >= 0 && (w - 1) >= 0)
-                        c = (int) decodedFrame.at<uchar>(h - 1, w - 1);
-                    else
-                        c = 0;
-
-                    int v = golomb->decode();
-
-                    if (c >= max(a, b))
-                        decodedFrame.at<uchar>(h, w) = (unsigned char) (min(a, b) + v);
-                    else if (c <= min(a, b))
-                        decodedFrame.at<uchar>(h, w) = (unsigned char) (max(a, b) + v);
-                    else
-                        decodedFrame.at<uchar>(h, w) = (unsigned char) ((a + b - c) + v);
-                }
-            }
-            return decodedFrame;
-        }
- 
         void writeFrameSize(int lines, int columns, Mat frame) {
             if (flag) {
+                cout << "Writing file info..." << endl;
                 string width  = to_string(columns);
                 string height = to_string(lines);
                 string frames = to_string(framesNumber);
