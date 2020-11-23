@@ -9,4 +9,5 @@ test.bin
 video-player/.idea/
 video-player/src/Golomb
 video-player/src/LosslessIntraFrameCodec
+video-player/src/Encoded4JPEGLS.bin
 
