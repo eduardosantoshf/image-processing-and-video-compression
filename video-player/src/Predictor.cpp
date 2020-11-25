@@ -19,7 +19,16 @@ class Predictor {
 		WBitStream *wbs;
 
 	public: 
-	   	Predictor(string filename, int vt, int pt, int mValue, int fn, int flag2){
+	   	Predictor (string filename, int vt, int pt, int mValue, int fn, int flag2) {
+               /**
+                * Predictor constructor
+                * @param filename file name
+                * @param vt video format
+                * @param pt predictor type
+                * @param mValue value of m
+                * @param fn number of frames from the file
+                * @param flag2 if 1 encode, else decode
+                */
 	   		if (flag2 == 1){
 		   		m = mValue;
 		   		predictorType = pt;
@@ -61,14 +70,30 @@ class Predictor {
 	   	}
 	   	
         int getFramesNumber(){
+            /**
+             * Function to get the number of frames
+             * 
+             * @return number of frames
+             */ 
             return framesNumber;
         }
         
         int getPredictorType(){
+            /**
+             * Function to get the predictor type
+             * 
+             * @return predictor type
+             */ 
             return predictorType;
         }
 	    	
 	    void encodeJPEG1(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 1st predictor
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -92,6 +117,12 @@ class Predictor {
         }
         
         void encodeJPEG2(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 2nd predictor
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -115,6 +146,12 @@ class Predictor {
         }
 
         void encodeJPEG3(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 3rd predictor
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -138,6 +175,12 @@ class Predictor {
         }
 
         void encodeJPEG4(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 4th predictor
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -173,6 +216,12 @@ class Predictor {
         }
 
         void encodeJPEG5(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 5th predictor
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -208,6 +257,12 @@ class Predictor {
         }
 
         void encodeJPEG6(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 6th predictor
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -243,6 +298,12 @@ class Predictor {
         }
 
         void encodeJPEG7(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 7th predictor
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -272,6 +333,12 @@ class Predictor {
         }
 
         void encodeJPEGLS(Mat frame) {
+            /**
+             * Function to encode a given frame, using
+             * the 8h predictor - JPEG-LS
+             * 
+             * @param frame frame
+             */
             int lines = frame.rows;
             int columns = frame.cols;
 
@@ -312,6 +379,11 @@ class Predictor {
         }
 	   	
 	   	Mat decodeJPEG1(){
+            /**
+             * Function to decode one JPEG1 encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
             int a;
@@ -332,6 +404,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG2(){
+            /**
+             * Function to decode one JPEG2 encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
             int b;
@@ -354,6 +431,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG3(){
+            /**
+             * Function to decode one JPEG3 encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
             int c;
@@ -374,6 +456,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG4(){
+            /**
+             * Function to decode one JPEG4 encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
 			int a, b, c2;
@@ -407,6 +494,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG5(){
+            /**
+             * Function to decode one JPEG5 encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
 			int a, b, c2;
@@ -440,6 +532,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG6(){
+            /**
+             * Function to decode one JPEG6 encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
 			int a, b, c2;
@@ -473,6 +570,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG7(){
+            /**
+             * Function to decode one JPEG7 encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
 			int a, b;
@@ -499,6 +601,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEGLS(){
+            /**
+             * Function to decode one JPEG-LS encoded frame
+             * 
+             * @return decoded frame
+             */
 	   		Mat decodedFrame(height, width, 0);
 
 			int a, b, c2;
@@ -539,6 +646,10 @@ class Predictor {
 	   	}
 
         void writeFrameSize(int lines, int columns, Mat frame) {
+            /**
+             * Function to write some info at the begining of
+             * a to be encrypted file 
+             */
             if (flag) {
                 cout << "Writing file info..." << endl;
                 string width  = to_string(columns);

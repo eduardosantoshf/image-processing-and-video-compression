@@ -11,6 +11,16 @@ class LosslessIntraFrameCodec {
         Predictor *predictor;
 
     public:
+        /**
+         * Lossless Intra-Frame Codec Constructor
+         * 
+         * @param initialF initial file name
+         * @param resultFile result file name
+         * @param vf video format
+         * @param pt predictor type
+         * @param mValue value of m
+         * @param flag initialize the predictor with given values
+         */
         LosslessIntraFrameCodec(string initialF, string resultFile, int vf, int pt, int mValue, int flag) {
             initialFile = initialF;
             videoFormat = vf;
@@ -37,6 +47,11 @@ class LosslessIntraFrameCodec {
         }
 
         void losslessEncode() {
+            /**
+             * Function to encode a given video, using
+             * 1 of the 8 predictors
+             * 
+             */
             VideoCapture cap(initialFile);
 
             Mat frame;
@@ -176,7 +191,12 @@ class LosslessIntraFrameCodec {
         }
 
         void losslessDecode() {
-
+            /**
+             * Function to decode a given .bin file,
+             * checking the predictor type and m value
+             * from the file and choosing the respective algorithm
+             * to decode 
+             */
             Mat decodedFrame;
             Mat decodedChannel0;
             Mat decodedChannel1;
@@ -284,9 +304,9 @@ class LosslessIntraFrameCodec {
             }
             else if (predictor->getPredictorType() == 7) {
                 for (int i = 0; i < predictor->getFramesNumber(); i++) {
-                    decodedChannel0 = predictor->decodeJPEGLS();
-                    decodedChannel1 = predictor->decodeJPEGLS();
-                    decodedChannel2 = predictor->decodeJPEGLS();
+                    decodedChannel0 = predictor->decodeJPEG7();
+                    decodedChannel1 = predictor->decodeJPEG7();
+                    decodedChannel2 = predictor->decodeJPEG7();
 
                     decodedChannels = {decodedChannel0,decodedChannel1,decodedChannel2};
 
