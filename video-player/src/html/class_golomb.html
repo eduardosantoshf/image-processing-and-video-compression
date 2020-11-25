@@ -74,6 +74,10 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7a7cb8ac22578329b6fa763b995a6fc0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#a7a7cb8ac22578329b6fa763b995a6fc0">Golomb</a> (int <a class="el" href="class_golomb.html#aea433fe3049440988ad1fa1a5eb536a3">m</a>)</td></tr>
 <tr class="separator:a7a7cb8ac22578329b6fa763b995a6fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e3cd4b45583b685e2441aff8f63e1f"><td class="memItemLeft" align="right" valign="top">vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#a46e3cd4b45583b685e2441aff8f63e1f">encode</a> (int n)</td></tr>
+<tr class="separator:a46e3cd4b45583b685e2441aff8f63e1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19bdf5f26292858dac0dae9e380dda75"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#a19bdf5f26292858dac0dae9e380dda75">decode</a> (vector&lt; bool &gt; encodedNumber)</td></tr>
+<tr class="separator:a19bdf5f26292858dac0dae9e380dda75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a6ab72e7727a310b2c14168556a63a8"><td class="memItemLeft" align="right" valign="top">vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#a7a6ab72e7727a310b2c14168556a63a8">base2Encode</a> (int n)</td></tr>
 <tr class="separator:a7a6ab72e7727a310b2c14168556a63a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1a2325d212ef2cee7267628a0fc0a3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#ab1a2325d212ef2cee7267628a0fc0a3d">base2Decode</a> (vector&lt; bool &gt; encodedNumber)</td></tr>
@@ -82,6 +86,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a87294e329bbfe8b61564926630fd9a4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85650c80ad07054d1e0a5727d35e6e6a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#a85650c80ad07054d1e0a5727d35e6e6a">truncatedDecode</a> (vector&lt; bool &gt; encodedNumber)</td></tr>
 <tr class="separator:a85650c80ad07054d1e0a5727d35e6e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15968ad170e33dfa72538641078e85db"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#a15968ad170e33dfa72538641078e85db">Golomb</a> (string file, int M, int Flag)</td></tr>
+<tr class="separator:a15968ad170e33dfa72538641078e85db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac23190a357af7db62de1f4a213c6ce36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#ac23190a357af7db62de1f4a213c6ce36">encode</a> (int n)</td></tr>
+<tr class="separator:ac23190a357af7db62de1f4a213c6ce36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfc8d58261fc9bcc5d5e2559aed4a288"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#abfc8d58261fc9bcc5d5e2559aed4a288">decode</a> ()</td></tr>
+<tr class="separator:abfc8d58261fc9bcc5d5e2559aed4a288"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab928e9d8241432f201c1c8d72b544959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#ab928e9d8241432f201c1c8d72b544959">close</a> ()</td></tr>
+<tr class="separator:ab928e9d8241432f201c1c8d72b544959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab41b0a8532ebd5844e65802c2281ce68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_golomb.html#ab41b0a8532ebd5844e65802c2281ce68">SkipNBytes</a> (int n)</td></tr>
+<tr class="separator:ab41b0a8532ebd5844e65802c2281ce68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -90,7 +104,7 @@ Public Attributes</h2></td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7a7cb8ac22578329b6fa763b995a6fc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a7cb8ac22578329b6fa763b995a6fc0">&#9670;&nbsp;</a></span>Golomb()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a7cb8ac22578329b6fa763b995a6fc0">&#9670;&nbsp;</a></span>Golomb() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -104,6 +118,48 @@ Public Attributes</h2></td></tr>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>m</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a15968ad170e33dfa72538641078e85db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15968ad170e33dfa72538641078e85db">&#9670;&nbsp;</a></span>Golomb() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Golomb::Golomb </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>M</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>Flag</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -181,6 +237,160 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>encoded number, stored in a vector</dd></dl>
+
+</div>
+</div>
+<a id="ab928e9d8241432f201c1c8d72b544959"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab928e9d8241432f201c1c8d72b544959">&#9670;&nbsp;</a></span>close()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Golomb::close </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abfc8d58261fc9bcc5d5e2559aed4a288"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfc8d58261fc9bcc5d5e2559aed4a288">&#9670;&nbsp;</a></span>decode() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Golomb::decode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a19bdf5f26292858dac0dae9e380dda75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19bdf5f26292858dac0dae9e380dda75">&#9670;&nbsp;</a></span>decode() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Golomb::decode </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; bool &gt;&#160;</td>
+          <td class="paramname"><em>encodedNumber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46e3cd4b45583b685e2441aff8f63e1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46e3cd4b45583b685e2441aff8f63e1f">&#9670;&nbsp;</a></span>encode() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt;bool&gt; Golomb::encode </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac23190a357af7db62de1f4a213c6ce36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac23190a357af7db62de1f4a213c6ce36">&#9670;&nbsp;</a></span>encode() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Golomb::encode </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab41b0a8532ebd5844e65802c2281ce68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab41b0a8532ebd5844e65802c2281ce68">&#9670;&nbsp;</a></span>SkipNBytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Golomb::SkipNBytes </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -267,8 +477,9 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="_golomb_8cpp.html">Golomb.cpp</a></li>
+<li><a class="el" href="_golomb2_8cpp.html">Golomb2.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['methods_2ecpp_95',['methods.cpp',['../methods_8cpp.html',1,'']]],
-  ['methods_2ehpp_96',['methods.hpp',['../methods_8hpp.html',1,'']]]
+  ['golomb_2ecpp_136',['Golomb.cpp',['../_golomb_8cpp.html',1,'']]],
+  ['golomb2_2ecpp_137',['Golomb2.cpp',['../_golomb2_8cpp.html',1,'']]]
 ];

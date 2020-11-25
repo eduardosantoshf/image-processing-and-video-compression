@@ -1,9 +1,17 @@
 var searchData=
 [
-  ['ratio2_59',['ratio2',['../2__i_8cpp.html#a811a622df667943b1d53e7c00dfff671',1,'2_i.cpp']]],
-  ['readbit_60',['readBit',['../class_bit_stream.html#a4bebf59fe9379dbdefb4647fdd2ddf01',1,'BitStream']]],
-  ['readbuff_61',['readBuff',['../class_bit_stream.html#ab1c33115c0a25fa49db5ee13307f4e55',1,'BitStream']]],
-  ['readfile_62',['readFile',['../class_bit_stream.html#aa57e2f09c071d096af20f273934bbdf6',1,'BitStream']]],
-  ['readnbits_63',['readNBits',['../class_bit_stream.html#a6bd23872284616ef322d3d226cc2eec8',1,'BitStream']]],
-  ['regular_5fblur_64',['regular_blur',['../methods_8cpp.html#afe1d843f76484893dbb432883fddfb9b',1,'regular_blur(Mat initial_image, int b1, int b2):&#160;methods.cpp'],['../methods_8hpp.html#a4c3f47e711dc2c4f7469758b07c82a7c',1,'regular_blur(cv::Mat initial_image, int b1, int b2):&#160;methods.hpp']]]
+  ['m_70',['m',['../class_golomb.html#aea433fe3049440988ad1fa1a5eb536a3',1,'Golomb']]],
+  ['main_71',['main',['../1_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;1.cpp'],['../2__a_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;2_a.cpp'],['../2__b_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;2_b.cpp'],['../2__c_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;2_c.cpp'],['../2__d_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;2_d.cpp'],['../2__e_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;2_e.cpp'],['../2__f_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;2_f.cpp'],['../2__g_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;2_g.cpp'],['../2__h_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;2_h.cpp'],['../2__i_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;2_i.cpp'],['../3_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;3.cpp'],['../5_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;5.cpp'],['../7_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;7.cpp'],['../8_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;8.cpp']]],
+  ['max_5felem_72',['max_elem',['../2__g_8cpp.html#ab72ac8dfe155fe4597d46967109b652c',1,'2_g.cpp']]],
+  ['max_5fkernel_5fsize_73',['max_kernel_size',['../2__g_8cpp.html#a1e1c3f31b59b48fa5fa1b41081805743',1,'2_g.cpp']]],
+  ['max_5flowthreshold_74',['max_lowThreshold',['../2__i_8cpp.html#a8f373c9d9dfc84dc015a8d6f3525383c',1,'2_i.cpp']]],
+  ['max_5foperator_75',['max_operator',['../2__g_8cpp.html#a46ef06027437a83d59cbbd3b47c8ceef',1,'2_g.cpp']]],
+  ['methods_2ecpp_76',['methods.cpp',['../methods_8cpp.html',1,'']]],
+  ['methods_2ehpp_77',['methods.hpp',['../methods_8hpp.html',1,'']]],
+  ['modified_5fimage_78',['modified_image',['../2__g_8cpp.html#a4085e63895fc29a6fecc0cc8a47f336a',1,'2_g.cpp']]],
+  ['morph_5felem_79',['morph_elem',['../2__g_8cpp.html#a43e786b2dc4ff7b5d8cae16f544e88b8',1,'2_g.cpp']]],
+  ['morph_5foperator_80',['morph_operator',['../2__g_8cpp.html#ac7bf89d526636500902eb14cae355443',1,'2_g.cpp']]],
+  ['morph_5fsize_81',['morph_size',['../2__g_8cpp.html#aff2c673638dea5a375c4a0c43c257bd7',1,'2_g.cpp']]],
+  ['morphological_5foperation_82',['morphological_operation',['../methods_8cpp.html#ac836535df8bb781bd53df29453c0cd2b',1,'morphological_operation(Mat initial_image, Mat result_image, int op, Mat elem):&#160;methods.cpp'],['../methods_8hpp.html#a3df5618e6be7e6152cecb9ee2e2abc76',1,'morphological_operation(cv::Mat initial_image, cv::Mat result_image, int op, cv::Mat elem):&#160;methods.hpp']]],
+  ['morphology_5foperations_83',['Morphology_Operations',['../2__g_8cpp.html#a84c93b6a5feb94cf874112386baa0986',1,'2_g.cpp']]]
 ];
