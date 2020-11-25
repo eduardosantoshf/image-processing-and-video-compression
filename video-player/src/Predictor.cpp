@@ -158,18 +158,18 @@ class Predictor {
             writeFrameSize(lines, columns, frame);
 
             int pixel;
-            int c = 0;
+            int c2 = 0;
 
             for (int l = 0; l < lines; l++) {
                 for (int c = 0; c < columns; c++) {
                     if ((l - 1) >= 0 && (c - 1) >= 0)
-                        c = (int) frame.at<uchar>(l - 1, c - 1);
+                        c2 = (int) frame.at<uchar>(l - 1, c - 1);
                     else
-                        c = 0;
+                        c2 = 0;
                     
                     pixel = (int) frame.at<uchar>(l, c);
                     
-                    golomb->encode(pixel - c);
+                    golomb->encode(pixel - c2);
                 }
             }
         }
