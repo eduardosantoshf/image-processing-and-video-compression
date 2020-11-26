@@ -438,18 +438,18 @@ class Predictor {
              */
 	   		Mat decodedFrame(height, width, 0);
 
-            int c;
+            int c2;
 
 			for (int l = 0; l < height; l++){
 				for (int c = 0; c < width; c++){
 					if ((l - 1) >= 0 && (c - 1) >= 0){
-						c = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
 					}
                     else{
-						c = 0;
+						c2 = 0;
 					}
 					int d = golomb->decode();
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + c);		
+					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + c2);		
 				}
 			}
 			return decodedFrame;
