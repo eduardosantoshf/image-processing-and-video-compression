@@ -15,11 +15,15 @@ class Predictor {
 		int height;
 		int width;
 		int flag;
+
+        int blockSize;
+        int searchArea;
+
 		Golomb *golomb;
 		WBitStream *wbs;
 
 	public: 
-	   	Predictor (string filename, int vt, int pt, int mValue, int fn, int flag2) {
+	   	Predictor (string filename, int vt, int pt, int mValue, int fn, int flag2, int bS, int sA) {
                /**
                 * Predictor constructor
                 * @param filename file name
@@ -41,6 +45,10 @@ class Predictor {
 		   		wbs->writeNBits(videoFormat,8);
 		   		wbs->writeNBits(predictorType, 8);
 		   		wbs->writeNBits(m, 8);
+
+                wbs->writeNBits(bS, 8);
+                wbs->writeNBits(sA, 8);
+
 		   	}else{
 		   		RBitStream rbs(filename);
 
@@ -52,6 +60,12 @@ class Predictor {
 
 		   		m = rbs.readNBits(8);
                 cout << "m: " << m << endl;
+
+                blockSize = rbs.readNBits(8);
+                cout << "Block Size: " << blockSize << endl;
+
+                searchArea = rbs.readNBits(8);
+                cout << "Search Area: " << searchArea << endl;
 
 		   		width = stoi(rbs.readString(4));
                 cout << "width: " << width << endl;
