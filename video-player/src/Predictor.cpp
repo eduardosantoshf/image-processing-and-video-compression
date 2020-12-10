@@ -15,6 +15,7 @@ class Predictor {
 		int height;
 		int width;
 		int flag;
+        string filename;
 
         int blockSize;
         int searchArea;
@@ -23,7 +24,7 @@ class Predictor {
 		WBitStream *wbs;
 
 	public: 
-	   	Predictor (string filename, int vt, int pt, int mValue, int fn, int flag2, int bS, int sA) {
+	   	Predictor (string fName, int vt, int pt, int mValue, int fn, int flag2, int bS, int sA) {
                /**
                 * Predictor constructor
                 * @param filename file name
@@ -34,6 +35,7 @@ class Predictor {
                 * @param flag2 if 1 encode, else decode
                 */
 	   		if (flag2 == 1){
+                filename = fName;
 		   		m = mValue;
 		   		predictorType = pt;
 		   		videoFormat = vt;
@@ -100,7 +102,37 @@ class Predictor {
              */ 
             return predictorType;
         }
-	    	
+
+        void close(){
+            golomb->close();
+        }
+
+
+        
+        void encodeBlock(vector<Mat> planes) {
+            int lines, columns;
+
+            Mat block, newBlock;
+
+            for (Mat plane: planes) {
+                lines = b.rows;
+                columns = b.cols;
+
+                for (int l = 0; l < lines; l + blockSize) {
+                    for (int c = 0; c < columns; c + blockSize) {
+                        newBlock = plane.colRange(c, c + blockSize).rowRange(l, l + blockSize);
+                        for (int l2 = l - searchArea; l2 < l + searchArea; l2++) {
+                            for (int c2 = c - searchArea; c2 < c + searchArea; c2++) {
+                                if (l2 > 0 && (l2 + blockSize) < l && c2 > 0 && (c2 + blockSize) < c) {
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            
 	    void encodeJPEG1(Mat frame) {
             /**
              * Function to encode a given frame, using
@@ -683,6 +715,9 @@ class Predictor {
                 wbs->writeString(width);
                 wbs->writeString(height);
                 wbs->writeString(frames);
+
+                wbs->closeNoWrite();
+                golomb = new Golomb(filename, m, 1);
 
                 flag = 0;
             }
