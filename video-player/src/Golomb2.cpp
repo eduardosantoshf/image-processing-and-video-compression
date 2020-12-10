@@ -104,6 +104,7 @@ class Golomb {
 	   	void close(){
 	   		if (flag == 1){
 	   			wbs->close();
+				wbs->closeNoWrite();
 	   		}
 	   	}
 	   	
