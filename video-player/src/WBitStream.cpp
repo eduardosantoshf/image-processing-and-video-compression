@@ -10,20 +10,19 @@ class WBitStream {
 		unsigned char cacheWrite;
 		int posWrite;
 		string FileName;
-
+		ofstream *ofsb;
+		
 		void writeByte(){
-			ofstream ofsb(FileName, ios::binary | ios::app | ios::out);
-			ofsb.write(reinterpret_cast<char*>(&cacheWrite), 1);
-			ofsb.close();
+			ofsb->write(reinterpret_cast<char*>(&cacheWrite), 1);
 		}
 		
 	public: 
 
 		WBitStream(string file){
+			ofsb = new ofstream(file, ios::binary | ios::app | ios::out);
 			FileName = file;
 			cacheWrite = 0;
 			posWrite = 7;
-		
 		}
 		
 		void writeBit(int i){
@@ -55,23 +54,8 @@ class WBitStream {
 		void close(){
 			writeByte();
 		}
+
+		void closeNoWrite() {
+			ofsb->close();
+		}
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
