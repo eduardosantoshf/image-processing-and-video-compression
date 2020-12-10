@@ -107,8 +107,6 @@ class Predictor {
             golomb->close();
         }
 
-
-        
         void encodeBlock(vector<Mat> planes) {
             int lines, columns;
 
