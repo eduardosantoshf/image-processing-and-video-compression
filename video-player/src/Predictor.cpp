@@ -109,8 +109,14 @@ class Predictor {
 
         void encodeBlock(vector<Mat> planes) {
             int lines, columns;
+            int c = 0;
+            int cBlocks = 0;
+            int s = 0;
+            int lS = 100 * 100;
+            int vectorX = 0;
+            int vectorY = 0;
 
-            Mat block, newBlock;
+            Mat block, thisBlock, mayBeBlock;
 
             for (Mat plane: planes) {
                 lines = b.rows;
@@ -118,16 +124,36 @@ class Predictor {
 
                 for (int l = 0; l < lines; l + blockSize) {
                     for (int c = 0; c < columns; c + blockSize) {
-                        newBlock = plane.colRange(c, c + blockSize).rowRange(l, l + blockSize);
+                        thisBlock = plane.colRange(c, c + blockSize).rowRange(l, l + blockSize);
                         for (int l2 = l - searchArea; l2 < l + searchArea; l2++) {
                             for (int c2 = c - searchArea; c2 < c + searchArea; c2++) {
                                 if (l2 > 0 && (l2 + blockSize) < l && c2 > 0 && (c2 + blockSize) < c) {
-                                    
+                                    mayBeBlock = lastFrame[c].colRange(c2, c2 + blockSize).rowRange(l2, l2 + blockSize);
+                                    for (int b1 = 0; b1 < blockSize; b1++) {
+                                        for (int b2 = 0; b2 < blockSize; b2++) {
+                                            s = s + abs(((int)thisBlock.at<uchar>(b1, b2) - (int)mayBeBlock.at<uchar>(b1, b2)));
+                                        }
+                                    }
+
+                                    if (s < lS) {
+                                        lS = s;
+                                        vectorX = l2;
+                                        vectorY = c2;
+                                        theBlock = mayBeBlock;
+                                    }
                                 }
+
+                                s = 0;
                             }
                         }
+                        lS = 100 * 100;
+                        golomb->encode(l - vectorX);
+                        golomb->encode(c - vectorY);
+                        golomb->encodeBlock(blockSize, theBlock, thisBlock);
+                        cBlocks++;
                     }
                 }
+                c++;
             }
         }
             
