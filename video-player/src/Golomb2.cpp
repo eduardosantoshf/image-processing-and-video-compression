@@ -115,7 +115,15 @@ class Golomb {
 	   		}
 	   		//rbs->readBit();
 	   	}
-		
+
+		void encodeBlock(int blockSize, Mat theBlock, Mat thisBlock) {
+			for (int i = 0; i < blockSize; i++) {
+				for (int j = 0; j < blockSize; ++) {
+					int n = (int)((int)theBlock.at<uchar>(i, j) - (int)thisBlock.at<uchar>(i, j));
+					encode(n);
+				}
+			}
+		}
 };
 
 
