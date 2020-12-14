@@ -109,7 +109,7 @@ class Predictor {
 
         void encodeBlock(vector<Mat> planes) {
             int lines, columns;
-            int c = 0;
+            int count = 0;
             int cBlocks = 0;
             int s = 0;
             int lS = 100 * 100;
@@ -128,13 +128,12 @@ class Predictor {
                         for (int l2 = l - searchArea; l2 < l + searchArea; l2++) {
                             for (int c2 = c - searchArea; c2 < c + searchArea; c2++) {
                                 if (l2 > 0 && (l2 + blockSize) < l && c2 > 0 && (c2 + blockSize) < c) {
-                                    mayBeBlock = lastFrame[c].colRange(c2, c2 + blockSize).rowRange(l2, l2 + blockSize);
+                                    mayBeBlock = lastFrame[count].colRange(c2, c2 + blockSize).rowRange(l2, l2 + blockSize);
                                     for (int b1 = 0; b1 < blockSize; b1++) {
                                         for (int b2 = 0; b2 < blockSize; b2++) {
                                             s = s + abs(((int)thisBlock.at<uchar>(b1, b2) - (int)mayBeBlock.at<uchar>(b1, b2)));
                                         }
                                     }
-
                                     if (s < lS) {
                                         lS = s;
                                         vectorX = l2;
@@ -142,7 +141,6 @@ class Predictor {
                                         theBlock = mayBeBlock;
                                     }
                                 }
-
                                 s = 0;
                             }
                         }
@@ -153,8 +151,52 @@ class Predictor {
                         cBlocks++;
                     }
                 }
-                c++;
+                count++;
             }
+        }
+
+        vector<Mat> decodeBlock() {
+            vector<Mat> decodedPlanes;
+            Mat p1(height, width, 0);
+            Mat p2(height, width, 0);
+            Mat p3(height, width, 0);
+            Mat thisBlock;
+            
+            int x, y;
+            int count = 0;
+
+            p1 = decodePlane(count);
+            count++;
+
+            p2 = decodePlane(count);
+            count++;
+
+            p3 = decodePlane(count);
+            count++;
+
+            decodedPlanes = {p1, p2, p3};
+        }
+
+        Mat decodePlane(int count) {
+            int x, y;
+            Mat p;
+
+            for (int l = 0; l < height; l++) {
+                for (int c = 0; c < width; c++) {
+                    x = l - golomb->decode();
+                    y = c - golomb->decode();
+
+                    thisBlock = lastFrame[count].colRange(y, y + blockSize).rowRange(x, x + blockSize);
+
+                    for (int b1 = 0; b1 < blockSize; b1++) {
+                        for (int b2 = 0; b2 < blockSize; b2++) {
+                            p.at<uchar>(l + b1, c + b2) = (unsigned char)-(golomb->decode() - (int)thisBlock.at<uchar>(b1, b2));
+                        }
+                    }
+                }
+            }
+
+            return p;
         }
             
 	    void encodeJPEG1(Mat frame) {
