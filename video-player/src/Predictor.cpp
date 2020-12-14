@@ -20,6 +20,8 @@ class Predictor {
         int blockSize;
         int searchArea;
 
+        vector<Mat> lastFrame;
+
 		Golomb *golomb;
 		WBitStream *wbs;
 
@@ -101,6 +103,14 @@ class Predictor {
              * @return predictor type
              */ 
             return predictorType;
+        }
+
+        int getVideoFormat(){
+            return videoFormat;
+        }
+
+        void setLastFrame(vector<Mat> channels) {
+            lastFrame = channels;
         }
 
         void close(){
