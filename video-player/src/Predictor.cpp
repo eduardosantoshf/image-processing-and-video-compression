@@ -19,6 +19,7 @@ class Predictor {
 
         int blockSize;
         int searchArea;
+        int periodicity;
 
         vector<Mat> lastFrame;
 
@@ -26,41 +27,46 @@ class Predictor {
 		WBitStream *wbs;
 
 	public: 
-	   	Predictor (string fName, int vt, int pt, int mValue, int fn, int flag2, int bS, int sA) {
+	   	Predictor (string fName, int vF, int pT, int mValue, int fN, int flag2, int bS, int sA, int p) {
                /**
                 * Predictor constructor
                 * @param filename file name
-                * @param vt video format
-                * @param pt predictor type
+                * @param vF video format
+                * @param pT predictor type
                 * @param mValue value of m
-                * @param fn number of frames from the file
+                * @param fN number of frames from the file
                 * @param flag2 if 1 encode, else decode
                 */
 	   		if (flag2 == 1){
                 filename = fName;
 		   		m = mValue;
-		   		predictorType = pt;
-		   		videoFormat = vt;
+		   		predictorType = pT;
+		   		videoFormat = vF;
 		   		golomb = new Golomb(filename, m, 1);
 		   		flag = 1;
-		   		framesNumber = fn;
+		   		framesNumber = fN;
+                
+                blockSize = bS;
+                searchArea = sA;
+                periodicity = p;
 
-		   		wbs = new WBitStream(filename);
-		   		wbs->writeNBits(videoFormat,8);
-		   		wbs->writeNBits(predictorType, 8);
-		   		wbs->writeNBits(m, 8);
+		   		wbs = new WBitStream(fName);
+		   		wbs->writeNBits(vF,8);
+		   		wbs->writeNBits(pT, 8);
+		   		wbs->writeNBits(mValue, 8);
 
                 wbs->writeNBits(bS, 8);
                 wbs->writeNBits(sA, 8);
+                wbs->writeNBits(p, 8);
 
-		   	}else{
+		   	}else {
 		   		RBitStream rbs(filename);
 
 		   		videoFormat = rbs.readNBits(8);
-                cout << "Type video: " << videoFormat << endl;
+                cout << "Video format: " << videoFormat << endl;
 
 		   		predictorType = rbs.readNBits(8);
-                cout << "Type : " << predictorType << endl;
+                cout << "Predictor type: " << predictorType << endl;
 
 		   		m = rbs.readNBits(8);
                 cout << "m: " << m << endl;
@@ -70,6 +76,9 @@ class Predictor {
 
                 searchArea = rbs.readNBits(8);
                 cout << "Search Area: " << searchArea << endl;
+
+                periodicity = rbs.readNBits(8);
+                cout << "Periodicity: " << periodicity << endl;
 
 		   		width = stoi(rbs.readString(4));
                 cout << "width: " << width << endl;
@@ -83,7 +92,7 @@ class Predictor {
 		   		rbs.close();
 
 		   		golomb = new Golomb(filename, m, 0);
-				golomb->SkipNBytes(15);
+				golomb->SkipNBytes(18);
 		   	}
 	   	}
 	   	
@@ -109,6 +118,10 @@ class Predictor {
             return videoFormat;
         }
 
+        int getPeriodicity(){
+            return periodicity;
+        }
+
         void setLastFrame(vector<Mat> channels) {
             lastFrame = channels;
         }
@@ -129,11 +142,11 @@ class Predictor {
             Mat block, thisBlock, mayBeBlock;
 
             for (Mat plane: planes) {
-                lines = b.rows;
-                columns = b.cols;
+                lines = plane.rows;
+                columns = plane.cols;
 
-                for (int l = 0; l < lines; l + blockSize) {
-                    for (int c = 0; c < columns; c + blockSize) {
+                for (int l = 0; l < lines; l += blockSize) {
+                    for (int c = 0; c < columns; c += blockSize) {
                         thisBlock = plane.colRange(c, c + blockSize).rowRange(l, l + blockSize);
                         for (int l2 = l - searchArea; l2 < l + searchArea; l2++) {
                             for (int c2 = c - searchArea; c2 < c + searchArea; c2++) {
@@ -148,7 +161,7 @@ class Predictor {
                                         lS = s;
                                         vectorX = l2;
                                         vectorY = c2;
-                                        theBlock = mayBeBlock;
+                                        block = mayBeBlock;
                                     }
                                 }
                                 s = 0;
@@ -157,7 +170,7 @@ class Predictor {
                         lS = 100 * 100;
                         golomb->encode(l - vectorX);
                         golomb->encode(c - vectorY);
-                        golomb->encodeBlock(blockSize, theBlock, thisBlock);
+                        golomb->encodeBlock(blockSize, block, thisBlock);
                         cBlocks++;
                     }
                 }
@@ -170,7 +183,6 @@ class Predictor {
             Mat p1(height, width, 0);
             Mat p2(height, width, 0);
             Mat p3(height, width, 0);
-            Mat thisBlock;
             
             int x, y;
             int count = 0;
@@ -185,11 +197,13 @@ class Predictor {
             count++;
 
             decodedPlanes = {p1, p2, p3};
+
+            return decodedPlanes;
         }
 
         Mat decodePlane(int count) {
             int x, y;
-            Mat p;
+            Mat p, thisBlock;
 
             for (int l = 0; l < height; l++) {
                 for (int c = 0; c < width; c++) {
