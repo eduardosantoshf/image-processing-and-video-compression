@@ -5,8 +5,10 @@
 #include <math.h>
 #include "RBitStream.cpp"
 #include "WBitStream.cpp"
+#include "opencv2/opencv.hpp"
 
 using namespace std;
+using namespace cv;
 
 class Golomb {
 	private:
@@ -118,28 +120,10 @@ class Golomb {
 
 		void encodeBlock(int blockSize, Mat theBlock, Mat thisBlock) {
 			for (int i = 0; i < blockSize; i++) {
-				for (int j = 0; j < blockSize; ++) {
+				for (int j = 0; j < blockSize; j++) {
 					int n = (int)((int)theBlock.at<uchar>(i, j) - (int)thisBlock.at<uchar>(i, j));
 					encode(n);
 				}
 			}
 		}
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
