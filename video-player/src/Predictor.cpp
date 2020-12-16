@@ -135,7 +135,7 @@ class Predictor {
             int count = 0;
             int cBlocks = 0;
             int s = 0;
-            int lS = 100 * 100;
+            int lS = 1000 * 1000;
             int vectorX = 0;
             int vectorY = 0;
 
@@ -148,13 +148,13 @@ class Predictor {
                 for (int l = 0; l < lines; l += blockSize) {
                     for (int c = 0; c < columns; c += blockSize) {
                         thisBlock = plane.colRange(c, c + blockSize).rowRange(l, l + blockSize);
-                        for (int l2 = l - searchArea; l2 < l + searchArea; l2++) {
-                            for (int c2 = c - searchArea; c2 < c + searchArea; c2++) {
+                        for (int l2 = l - searchArea; l2 < l + searchArea + blockSize; l2++) {
+                            for (int c2 = c - searchArea; c2 < c + searchArea + blockSize; c2++) {
                                 if (l2 > 0 && (l2 + blockSize) < l && c2 > 0 && (c2 + blockSize) < c) {
                                     mayBeBlock = lastFrame[count].colRange(c2, c2 + blockSize).rowRange(l2, l2 + blockSize);
                                     for (int b1 = 0; b1 < blockSize; b1++) {
                                         for (int b2 = 0; b2 < blockSize; b2++) {
-                                            s = s + abs(((int)thisBlock.at<uchar>(b1, b2) - (int)mayBeBlock.at<uchar>(b1, b2)));
+                                            s += abs(((int)thisBlock.at<uchar>(b1, b2) - (int)mayBeBlock.at<uchar>(b1, b2)));
                                         }
                                     }
                                     if (s < lS) {
@@ -167,7 +167,7 @@ class Predictor {
                                 s = 0;
                             }
                         }
-                        lS = 100 * 100;
+                        lS = 1000 * 1000;
                         golomb->encode(l - vectorX);
                         golomb->encode(c - vectorY);
                         golomb->encodeBlock(blockSize, block, thisBlock);
