@@ -39,9 +39,9 @@ class LosslessHybridCodec {
                     c++;
                     if (frame.empty()) break;
                 }
-                predictor = new Predictor(resultFile, videoFormat, predictorType, m, c, flag, blockSize, searchArea);
+                predictor = new Predictor(resultFile, videoFormat, predictorType, m, c, flag, blockSize, searchArea, periodicity);
             }
-            else predictor = new Predictor(resultFile, 0, 0, 0, 0, 0, blockSize, searchArea);
+            else predictor = new Predictor(resultFile, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         void losslessHybridEncode(){
@@ -51,9 +51,9 @@ class LosslessHybridCodec {
 
             int contador = 0;
 
-            if (predictorType = 1) {
+            if (predictorType == 1) {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -76,7 +76,7 @@ class LosslessHybridCodec {
                 }
             } else if (predictorType == 2) {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -99,7 +99,7 @@ class LosslessHybridCodec {
                 }
             } else if (predictorType == 3) {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -122,7 +122,7 @@ class LosslessHybridCodec {
                 }
             } else if (predictorType == 4) {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -145,7 +145,7 @@ class LosslessHybridCodec {
                 }
             } else if (predictorType == 5) {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -168,7 +168,7 @@ class LosslessHybridCodec {
                 }
             } else if (predictorType == 6) {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -191,7 +191,7 @@ class LosslessHybridCodec {
                 }
             } else if (predictorType == 7) {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -214,7 +214,7 @@ class LosslessHybridCodec {
                 }
             } else {
                 while(1) {
-                    Vector<Mat> channels;
+                    vector<Mat> channels;
                     cap >> frame;
                     cout << "Encoding Frame: "<< contador << endl;
                     contador++;
@@ -244,16 +244,16 @@ class LosslessHybridCodec {
             Mat p1, p2, p3;
             vector<Mat> channels;
 
-            int numberOfFrames, pType, vFormat;
-
-            cout << "Predictor type: " << pType << endl;
-            cout << "Video Format: " << vFormat << endl;
+            int numberOfFrames = predictor->getFramesNumber();
+            int pType = predictor->getPredictorType();
+            int vFormat = predictor->getVideoFormat();
+            int period = predictor->getPeriodicity();
 
             int contador = 0;
 
             if (pType == 1) {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEG1();
                         p2 = predictor->decodeJPEG1();
                         p3 = predictor->decodeJPEG1();
@@ -282,7 +282,7 @@ class LosslessHybridCodec {
                 }
             } else if (pType == 2) {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEG2();
                         p2 = predictor->decodeJPEG2();
                         p3 = predictor->decodeJPEG2();
@@ -311,7 +311,7 @@ class LosslessHybridCodec {
                 }
             } else if (pType == 3) {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEG3();
                         p2 = predictor->decodeJPEG3();
                         p3 = predictor->decodeJPEG3();
@@ -340,7 +340,7 @@ class LosslessHybridCodec {
                 }
             } else if (pType == 4) {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEG4();
                         p2 = predictor->decodeJPEG4();
                         p3 = predictor->decodeJPEG4();
@@ -369,7 +369,7 @@ class LosslessHybridCodec {
                 }
             } else if (pType == 5) {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEG5();
                         p2 = predictor->decodeJPEG5();
                         p3 = predictor->decodeJPEG5();
@@ -398,7 +398,7 @@ class LosslessHybridCodec {
                 }
             } else if (pType == 6) {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEG6();
                         p2 = predictor->decodeJPEG6();
                         p3 = predictor->decodeJPEG6();
@@ -427,7 +427,7 @@ class LosslessHybridCodec {
                 }
             } else if (pType == 7) {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEG7();
                         p2 = predictor->decodeJPEG7();
                         p3 = predictor->decodeJPEG7();
@@ -456,7 +456,7 @@ class LosslessHybridCodec {
                 }
             } else {
                 for (int i = 0; i < numberOfFrames; i++) {
-                    if (contador % periodicity == 0) {
+                    if (contador % period == 0) {
                         p1 = predictor->decodeJPEGLS();
                         p2 = predictor->decodeJPEGLS();
                         p3 = predictor->decodeJPEGLS();
