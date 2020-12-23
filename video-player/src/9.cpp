@@ -6,8 +6,11 @@ using namespace std;
 
 int main (int argc, char** argv) {
 
-    LosslessHybridCodec l(argv[1], "teste.bin", 0, 7, 4, 5, 5, 5, 1);
-    l.losslessHybridEncode();
+    LosslessHybridCodec l(argv[1], 4, 5, 0, 4, 4, 5, 1, "teste.bin");
+	l.encode();
+
+    //LosslessHybridCodec d("", 0, 0, 0, 0, 0, 0, 0, argv[1]);
+	//d.decode();
 
 	return 0;
 }
