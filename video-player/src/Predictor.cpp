@@ -1,7 +1,14 @@
 #include "opencv2/opencv.hpp"
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
 #include <iostream>
+#include <stdio.h>
+#include <fstream> 
 #include <vector>
-#include "Golomb2.cpp"
+#include <math.h>
+#include "Golomb.cpp"
+#include <string>
 
 using namespace cv;
 using namespace std;
@@ -9,807 +16,1931 @@ using namespace std;
 class Predictor {
 	private:
 		int m;
-		int predictorType;
-		int videoFormat;
-		int framesNumber;
-		int height;
-		int width;
-		int flag;
-        string filename;
-
-        int blockSize;
-        int searchArea;
-        int periodicity;
-
-        vector<Mat> lastFrame;
-
-		Golomb *golomb;
+		int type;
+		int typeVideo;
+		int n_frames;
+		int linhas;
+		int colunas;
+		int start;
+		int period;
+		Golomb *g;
+		int block_size;
+		int search_space;
+		vector<Mat> lastFrame;
+		int od;
+		string fileName;
 		WBitStream *wbs;
-
 	public: 
-	   	Predictor (string fName, int vF, int pT, int mValue, int fN, int flag2, int bS, int sA, int p) {
-               /**
-                * Predictor constructor
-                * @param filename file name
-                * @param vF video format
-                * @param pT predictor type
-                * @param mValue value of m
-                * @param fN number of frames from the file
-                * @param flag2 if 1 encode, else decode
-                */
-	   		if (flag2 == 1){
-                filename = fName;
-		   		m = mValue;
-		   		predictorType = pT;
-		   		videoFormat = vF;
-		   		golomb = new Golomb(filename, m, 1);
-		   		flag = 1;
-		   		framesNumber = fN;
-                
-                blockSize = bS;
-                searchArea = sA;
-                periodicity = p;
-
-		   		wbs = new WBitStream(fName);
-		   		wbs->writeNBits(vF,8);
-		   		wbs->writeNBits(pT, 8);
-		   		wbs->writeNBits(mValue, 8);
-
-                wbs->writeNBits(bS, 8);
-                wbs->writeNBits(sA, 8);
-                wbs->writeNBits(p, 8);
-
-		   	}else {
-		   		RBitStream rbs(filename);
-
-		   		videoFormat = rbs.readNBits(8);
-                cout << "Video format: " << videoFormat << endl;
-
-		   		predictorType = rbs.readNBits(8);
-                cout << "Predictor type: " << predictorType << endl;
-
+	
+	   	Predictor(int Type, int M,string file,int TypeVideo,int n_f,int flag,int bs,int ss,int peri){
+	   		fileName=file;
+	   		if (flag == 1){
+	   			block_size = bs;
+	   			search_space = ss;
+		   		m = M;
+		   		type = Type;
+		   		typeVideo = TypeVideo;
+		   		start = 1;
+		   		n_frames = n_f;
+		   		period = peri;
+		   		wbs = new WBitStream(file);
+		   		wbs->writeNBits(TypeVideo,8);
+		   		wbs->writeNBits(type,8);
+		   		wbs->writeNBits(M,8);
+		   		wbs->writeNBits(bs,8);
+		   		wbs->writeNBits(ss,8);
+		   		wbs->writeNBits(period,8);
+		   	}else{
+		   		RBitStream rbs(file);
+		   		od = 0;
+		   		typeVideo = rbs.readNBits(8);
+		   		type = rbs.readNBits(8);
 		   		m = rbs.readNBits(8);
-                cout << "m: " << m << endl;
-
-                blockSize = rbs.readNBits(8);
-                cout << "Block Size: " << blockSize << endl;
-
-                searchArea = rbs.readNBits(8);
-                cout << "Search Area: " << searchArea << endl;
-
-                periodicity = rbs.readNBits(8);
-                cout << "Periodicity: " << periodicity << endl;
-
-		   		width = stoi(rbs.readString(4));
-                cout << "width: " << width << endl;
-
-		   		height = stoi(rbs.readString(4));
-                cout << "height: " << height<< endl;
-
-		   		framesNumber = stoi(rbs.readString(4));
-                cout << "framesNumber: " << framesNumber<< endl;
-
+		   		block_size = rbs.readNBits(8);
+		   		search_space = rbs.readNBits(8);
+		   		period = rbs.readNBits(8);
+		   		colunas = stoi(rbs.readString(4));
+		   		linhas = stoi(rbs.readString(4));
+		   		n_frames = stoi(rbs.readString(4));
+		   		cout << "Type video: " << typeVideo << endl;
+		   		cout << "Type : " << type<< endl;
+		   		cout << "m: " << m << endl;
+		   		cout << "colunas: " << colunas << endl;
+		   		cout << "linhas: " << linhas<< endl;
+		   		cout << "n_frames: " << n_frames<< endl;
+		   		cout << "Search space: " << search_space << endl;
+		   		cout << "Block size: " << block_size << endl;
+		   		cout << "Period: " << period << endl;
 		   		rbs.close();
-
-		   		golomb = new Golomb(filename, m, 0);
-				golomb->SkipNBytes(18);
+		   		g = new Golomb(file,m,0);
+				g->SkipNBytes(18);
 		   	}
 	   	}
-	   	
-        int getFramesNumber(){
-            /**
-             * Function to get the number of frames
-             * 
-             * @return number of frames
-             */ 
-            return framesNumber;
-        }
-        
-        int getPredictorType(){
-            /**
-             * Function to get the predictor type
-             * 
-             * @return predictor type
-             */ 
-            return predictorType;
-        }
-
-        int getVideoFormat(){
-            return videoFormat;
-        }
-
-        int getPeriodicity(){
-            return periodicity;
-        }
-
-        void setLastFrame(vector<Mat> channels) {
-            lastFrame = channels;
-        }
-
-        void close(){
-            golomb->close();
-        }
-
-        void encodeBlock(vector<Mat> planes) {
-            int lines, columns;
-            int count = 0;
-            int cBlocks = 0;
-            int s = 0;
-            int lS = 1000 * 1000;
-            int vectorX = 0;
-            int vectorY = 0;
-
-            Mat block, thisBlock, mayBeBlock;
-
-            for (Mat plane: planes) {
-                lines = plane.rows;
-                columns = plane.cols;
-
-                for (int l = 0; l < lines; l += blockSize) {
-                    for (int c = 0; c < columns; c += blockSize) {
-                        thisBlock = plane.colRange(c, c + blockSize).rowRange(l, l + blockSize);
-                        for (int l2 = l - searchArea; l2 < l + searchArea + blockSize; l2++) {
-                            for (int c2 = c - searchArea; c2 < c + searchArea + blockSize; c2++) {
-                                if (l2 > 0 && (l2 + blockSize) < l && c2 > 0 && (c2 + blockSize) < c) {
-                                    mayBeBlock = lastFrame[count].colRange(c2, c2 + blockSize).rowRange(l2, l2 + blockSize);
-                                    for (int b1 = 0; b1 < blockSize; b1++) {
-                                        for (int b2 = 0; b2 < blockSize; b2++) {
-                                            s += abs(((int)thisBlock.at<uchar>(b1, b2) - (int)mayBeBlock.at<uchar>(b1, b2)));
-                                        }
-                                    }
-                                    if (s < lS) {
-                                        lS = s;
-                                        vectorX = l2;
-                                        vectorY = c2;
-                                        block = mayBeBlock;
-                                    }
-                                }
-                                s = 0;
-                            }
-                        }
-                        lS = 1000 * 1000;
-                        golomb->encode(l - vectorX);
-                        golomb->encode(c - vectorY);
-                        golomb->encodeBlock(blockSize, block, thisBlock);
-                        cBlocks++;
-                    }
-                }
-                count++;
-            }
-        }
-
-        vector<Mat> decodeBlock() {
-            vector<Mat> decodedPlanes;
-            Mat p1(height, width, 0);
-            Mat p2(height, width, 0);
-            Mat p3(height, width, 0);
-            
-            int x, y;
-            int count = 0;
-
-            p1 = decodePlane(count);
-            count++;
-
-            p2 = decodePlane(count);
-            count++;
-
-            p3 = decodePlane(count);
-            count++;
-
-            decodedPlanes = {p1, p2, p3};
-
-            return decodedPlanes;
-        }
-
-        Mat decodePlane(int count) {
-            int x, y;
-            Mat p, thisBlock;
-
-            for (int l = 0; l < height; l++) {
-                for (int c = 0; c < width; c++) {
-                    x = l - golomb->decode();
-                    y = c - golomb->decode();
-
-                    thisBlock = lastFrame[count].colRange(y, y + blockSize).rowRange(x, x + blockSize);
-
-                    for (int b1 = 0; b1 < blockSize; b1++) {
-                        for (int b2 = 0; b2 < blockSize; b2++) {
-                            p.at<uchar>(l + b1, c + b2) = (unsigned char)-(golomb->decode() - (int)thisBlock.at<uchar>(b1, b2));
-                        }
-                    }
-                }
-            }
-
-            return p;
-        }
-            
-	    void encodeJPEG1(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 1st predictor
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int a = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((c - 1) >= 0)
-                        a = (int) frame.at<uchar>(l, c - 1);
-                    else
-                        a = 0;
-
-                    pixel = (int) frame.at<uchar>(l, c);
-
-                    golomb->encode(pixel - a);
-                }
-            }
-        }
-        
-        void encodeJPEG2(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 2nd predictor
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int b = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((l - 1) >= 0)
-                        b = (int) frame.at<uchar>(l - 1, c);
-                    else
-                        b = 0;
-
-                    pixel = (int) frame.at<uchar>(l, c);
-                    
-                    golomb->encode(pixel - b);
-                }
-            }
-        }
-
-        void encodeJPEG3(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 3rd predictor
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int c2 = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((l - 1) >= 0 && (c - 1) >= 0)
-                        c2 = (int) frame.at<uchar>(l - 1, c - 1);
-                    else
-                        c2 = 0;
-                    
-                    pixel = (int) frame.at<uchar>(l, c);
-                    
-                    golomb->encode(pixel - c2);
-                }
-            }
-        }
-
-        void encodeJPEG4(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 4th predictor
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int a = 0;
-            int b = 0;
-            int c2 = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((c - 1) >= 0)
-                        a = (int) frame.at<uchar>(l, c - 1);
-                    else
-                        a = 0;
-                    
-                    if ((l - 1) >= 0)
-                        b = (int) frame.at<uchar>(l - 1, c);
-                    else
-                        b = 0;
-                    
-                    if ((l - 1) >= 0 && (c - 1) >= 0)
-                        c2 = (int) frame.at<uchar>(l - 1, c - 1);
-                    else
-                        c2 = 0;
-                    
-                    pixel = (int) frame.at<uchar>(l, c);
-
-                    golomb->encode(pixel - (a + b - c2));
-                }
-            }
-        }
-
-        void encodeJPEG5(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 5th predictor
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int a = 0;
-            int b = 0;
-            int c2 = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((c - 1) >= 0)
-                        a = (int) frame.at<uchar>(l, c - 1);
-                    else
-                        a = 0;
-                    
-                    if ((l - 1) >= 0)
-                        b = (int) frame.at<uchar>(l - 1, c);
-                    else
-                        b = 0;
-                    
-                    if ((l - 1) >= 0 && (c - 1) >= 0)
-                        c2 = (int) frame.at<uchar>(l - 1, c - 1);
-                    else
-                        c2 = 0;
-                    
-                    pixel = (int) frame.at<uchar>(l, c);
-
-                    golomb->encode(pixel - (a + ((b - c2) / 2)));
-                }
-            }
-        }
-
-        void encodeJPEG6(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 6th predictor
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int a = 0;
-            int b = 0;
-            int c2 = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((c - 1) >= 0)
-                        a = (int) frame.at<uchar>(l, c - 1);
-                    else
-                        a = 0;
-                    
-                    if ((l - 1) >= 0)
-                        b = (int) frame.at<uchar>(l - 1, c);
-                    else
-                        b = 0;
-                    
-                    if ((l - 1) >= 0 && (c - 1) >= 0)
-                        c2 = (int) frame.at<uchar>(l - 1, c - 1);
-                    else
-                        c2 = 0;
-                    
-                    pixel = (int) frame.at<uchar>(l, c);
-
-                    golomb->encode(pixel - (b + ((a - c2) / 2)));
-                }
-            }
-        }
-
-        void encodeJPEG7(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 7th predictor
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int a = 0;
-            int b = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((c - 1) >= 0)
-                        a = (int) frame.at<uchar>(l, c - 1);
-                    else
-                        a = 0;
-                    
-                    if ((l - 1) >= 0)
-                        b = (int) frame.at<uchar>(l - 1, c);
-                    else
-                        b = 0;
-
-                    pixel = (int) frame.at<uchar>(l, c);
-
-                    golomb->encode(pixel - ((a + b) / 2));
-                }
-            }
-        }
-
-        void encodeJPEGLS(Mat frame) {
-            /**
-             * Function to encode a given frame, using
-             * the 8h predictor - JPEG-LS
-             * 
-             * @param frame frame
-             */
-            int lines = frame.rows;
-            int columns = frame.cols;
-
-            writeFrameSize(lines, columns, frame);
-
-            int pixel;
-            int a = 0;
-            int b = 0;
-            int c2 = 0;
-
-            for (int l = 0; l < lines; l++) {
-                for (int c = 0; c < columns; c++) {
-                    if ((c - 1) >= 0)
-                        a = (int) frame.at<uchar>(l, c - 1);
-                    else
-                        a = 0;
-                    
-                    if ((l - 1) >= 0)
-                        b = (int) frame.at<uchar>(l - 1, c);
-                    else
-                        b = 0;
-                    
-                    if ((l - 1) >= 0 && (c - 1) >= 0)
-                        c2 = (int) frame.at<uchar>(l - 1, c - 1);
-                    else
-                        c2 = 0;
-                    
-                    pixel = (int) frame.at<uchar>(l, c);
-
-                    if (c2 >= max(a, b))
-                        golomb->encode(pixel - min(a, b));
-                    else if (c2 <= min(a, b))
-                        golomb->encode(pixel - max(a, b));
-                    else
-                        golomb->encode(pixel - (a + b - c2));
-                }
-            }
-        }
-	   	
-	   	Mat decodeJPEG1(){
-            /**
-             * Function to decode one JPEG1 encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-            int a;
-
-			for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if((c - 1) >= 0){
-						a = (int) decodedFrame.at<uchar>(l, c - 1);
+	    
+	    	int get_frames(){
+	    		return n_frames;
+	    	}
+	    	
+	    	int get_type(){
+	    		return type;
+	    	}
+	    	
+	    	int get_VideoType(){
+	    		return typeVideo;
+	    	}
+	    	
+	    	void set_last_frame(vector<Mat> planes){
+			lastFrame = planes;
+	    	}
+	    	
+	    	int get_period(){
+	    		return period;
+	    	}
+	    	
+	    	void close(){
+	    		g->close();
+	    	}
+	    	
+	    	void encode_by_blocks(vector<Mat> planes){
+	    	int lin;
+	   		int col;
+	   		int count = 0;
+	   		int count_blocks= 0;
+	   		Mat current_block;
+	   		Mat possible_block;
+	   		Mat min_block;
+	   		int lastSum = 100000;
+	   		int currentSum = 0;
+	   		int d_x=0;
+	   		int d_y=0;
+	    		for(Mat matrix :planes){
+	    			lin = matrix.rows;
+	    			col = matrix.cols;
+	    			for(int c = 0; c < lin; c+=block_size){
+					for(int i = 0; i < col; i+=block_size){
+						current_block = matrix.colRange(i,i+block_size).rowRange(c,c+block_size);
+						for(int k = c-search_space; k < c+search_space+block_size; k++){
+							for(int j = i-search_space; j < i +search_space+block_size  ; j++){
+								if (k+block_size < lin && k >= 0 && j >= 0 && j+block_size < col){
+									possible_block = lastFrame[count].colRange(j,j+block_size).rowRange(k,k+block_size);
+									for(int a = 0; a < block_size; a++){
+										for(int b = 0; b < block_size; b++){
+											currentSum = currentSum + abs(((int)current_block.at<uchar>(a,b)-(int)possible_block.at<uchar>(a,b)));
+										}
+									}
+									if (currentSum < lastSum){
+										lastSum = currentSum;
+										d_x = k;
+										d_y = j;
+										min_block = possible_block;
+									}
+								}
+								currentSum = 0;
+							}
+						}
+						lastSum = 10000;
+						g->encode(c-d_x);
+						g->encode(i-d_y);
+						for(int n = 0; n < block_size; n++){
+							for(int m = 0; m < block_size; m++){
+								int z= (int)((int)min_block.at<uchar>(n,m)-(int)current_block.at<uchar>(n,m));
+								g->encode(z);
+							}
+						}
+						count_blocks++;
 					}
-                    else{
-						a = 0;
+				}
+				count ++;
+	    		}
+	    	}
+	    	
+	    	vector<Mat> decode_by_blocks(){
+	    	    	vector<Mat> res;
+	    		if (typeVideo == 0){
+	    			Mat m1(linhas,colunas,0);
+	    			Mat m2(linhas,colunas,0);
+	    			Mat m3(linhas,colunas,0);
+	    			Mat current_block;
+	    			int x;
+	    			int y;
+	    			int count = 0;
+	    			for(int c = 0; c < linhas; c+=block_size){
+					for(int i = 0; i < colunas; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+							m1.at<uchar>(c+a,i+b) = (unsigned char)-(g->decode()-(int) current_block.at<uchar>(a,b));							
+							}
+						}				
 					}
-					int d = golomb->decode();
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a);				
+				}
+				count++;
+				for(int c = 0; c < linhas; c+=block_size){
+					for(int i = 0; i < colunas; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								m2.at<uchar>(c+a,i+b) = (unsigned char)-(g->decode()-(int) current_block.at<uchar>(a,b));
+							}
+						}				
+					}
+				}
+				count++;
+				for(int c = 0; c < linhas; c+=block_size){
+					for(int i = 0; i < colunas; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								m3.at<uchar>(c+a,i+b) = (unsigned char)-(g->decode()-(int) current_block.at<uchar>(a,b));
+							}
+						}				
+					}
+				}
+				res = {m1,m2,m3};
+	    			
+	    		}else if (typeVideo == 1){
+	    			Mat m1(linhas,colunas,0);
+	    			Mat m2(linhas,colunas,0);
+	    			Mat temp2(linhas,colunas/2,0);
+	    			Mat m3(linhas,colunas,0);
+	    			Mat temp3(linhas,colunas/2,0);
+	    			Mat current_block;
+	    			int x;
+	    			int y;
+	    			int count = 0;
+	    			int decoded;
+	    			int pixel;
+	    			for(int c = 0; c < linhas; c+=block_size){
+					for(int i = 0; i < colunas; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								m1.at<uchar>(c+a,i+b) = (unsigned char)-(g->decode()-(int) current_block.at<uchar>(a,b));							
+							}
+						}				
+					}
+				}
+				count++;
+				for(int c = 0; c < linhas; c+=block_size){
+					for(int i = 0; i < colunas/2; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								decoded = g->decode();
+								pixel = -(decoded-((int) current_block.at<uchar>(a,b)));
+								temp2.at<uchar>(c+a,i+b) = (unsigned char)(pixel);
+							}
+						}				
+					}
+				}
+				count++;
+				for(int c = 0; c < linhas; c+=block_size){
+					for(int i = 0; i < colunas/2; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								decoded = g->decode();
+								pixel = -(decoded-(int) current_block.at<uchar>(a,b));
+								temp3.at<uchar>(c+a,i+b) = (unsigned char)(pixel);
+							}
+						}				
+					}
+				}
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i+=2){
+						m2.at<uchar>(c,i) = temp2.at<uchar>(c,i/2);		
+						m2.at<uchar>(c,i+1) = temp2.at<uchar>(c,i/2);		
+						m3.at<uchar>(c,i) = temp3.at<uchar>(c,i/2);		
+						m3.at<uchar>(c,i+1) = temp3.at<uchar>(c,i/2);	
+					}
+				}
+				count++;
+				res = {m1,m2,m3};
+				set_last_frame({m1,temp2,temp3});
+	    			
+	    		}else if (typeVideo == 2){
+	    			Mat m1(linhas,colunas,0);
+	    			Mat m2(linhas,colunas,0);
+	    			Mat temp2(linhas/2,colunas/2,0);
+	    			Mat m3(linhas,colunas,0);
+	    			Mat temp3(linhas/2,colunas/2,0);
+	    			Mat current_block;
+	    			int x;
+	    			int y;
+	    			int count = 0;
+	    			int decoded;
+	    			int pixel;
+	    			for(int c = 0; c < linhas; c+=block_size){
+					for(int i = 0; i < colunas; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								m1.at<uchar>(c+a,i+b) = (unsigned char)-(g->decode()-(int) current_block.at<uchar>(a,b));							
+							}
+						}				
+					}
+				}
+				count++;
+				for(int c = 0; c < linhas/2; c+=block_size){
+					for(int i = 0; i < colunas/2; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								decoded = g->decode();
+								pixel = -(decoded-((int) current_block.at<uchar>(a,b)));
+								temp2.at<uchar>(c+a,i+b) = (unsigned char)(pixel);
+							}
+						}				
+					}
+				}
+				count++;
+				for(int c = 0; c < linhas/2; c+=block_size){
+					for(int i = 0; i < colunas/2; i+=block_size){
+						x = -(g->decode()-c);
+						y = -(g->decode()-i);
+						current_block = lastFrame[count].colRange(y,y+block_size).rowRange(x,x+block_size);
+						for(int a = 0; a < block_size; a++){
+							for(int b = 0; b < block_size; b++){
+								decoded = g->decode();
+								pixel = -(decoded-(int) current_block.at<uchar>(a,b));
+								temp3.at<uchar>(c+a,i+b) = (unsigned char)(pixel);
+							}
+						}				
+					}
+				}
+				for(int c = 0; c < linhas; c+=2){
+					for(int i = 0; i < colunas; i+=2){
+						m2.at<uchar>(c,i) = temp2.at<uchar>(c/2,i/2);	
+						m2.at<uchar>(c+1,i) = temp2.at<uchar>(c/2,i/2);	
+						m2.at<uchar>(c,i+1) = temp2.at<uchar>(c/2,i/2);	
+						m2.at<uchar>(c+1,i+1) = temp2.at<uchar>(c/2,i/2);	
+						m3.at<uchar>(c,i) = temp3.at<uchar>(c/2,i/2);	
+						m3.at<uchar>(c+1,i) = temp3.at<uchar>(c/2,i/2);	
+						m3.at<uchar>(c,i+1) = temp3.at<uchar>(c/2,i/2);	
+						m3.at<uchar>(c+1,i+1) = temp3.at<uchar>(c/2,i/2);
+					}
+				}
+				count++;
+				res = {m1,m2,m3};
+				set_last_frame({m1,temp2,temp3});
+	    			
+	    		}
+	    		return res;
+	    	}
+	    	
+	   	void encodeJPEG1(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					if(i-1 >= 0){
+						lastPixel = (int) f.at<uchar>(c,i-1);
+					}else{
+						lastPixel = 0;
+					}
+					pixel = (int) f.at<uchar>(c,i);
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
 				}
 			}
-			return decodedFrame;
+	   	}
+
+	   	void encodeJPEG2(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					if(c-1 >= 0){
+						lastPixel = (int) f.at<uchar>(c-1,i);
+					}else{
+						lastPixel = 0;
+					}
+					pixel = (int) f.at<uchar>(c,i);
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
+				}
+			}
+	   	}
+	   	
+	   	void encodeJPEG3(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					if(c-1 >= 0 && i-1>=0){
+						lastPixel = (int) f.at<uchar>(c-1,i-1);
+					}else{
+						lastPixel = 0;
+					}
+					pixel = (int) f.at<uchar>(c,i);
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
+				}
+			}
+	   	}
+	   	
+	   	void encodeJPEG4(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			int a;
+			int b;
+			int z;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					pixel = f.at<uchar>(c,i);
+					if(i-1 >=0){
+						a=(int)f.at<uchar>(c,i-1);
+					}else{
+						a=0;
+					}
+					if(c-1 >=0){
+						b=(int)f.at<uchar>(c-1,i);
+					}else{
+						b=0;
+					}
+					if(i-1 >=0 && c-1 >=0){
+						z=(int)f.at<uchar>(c-1,i-1);
+					}else{
+						z=0;
+					}
+					lastPixel = a+b-z;
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
+				}
+			}
+	   	}
+	   	
+	   	void encodeJPEG5(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			int a;
+			int b;
+			int z;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					pixel = f.at<uchar>(c,i);
+					if(i-1 >=0){
+						a=(int)f.at<uchar>(c,i-1);
+					}else{
+						a=0;
+					}
+					if(c-1 >=0){
+						b=(int)f.at<uchar>(c-1,i);
+					}else{
+						b=0;
+					}
+					if(i-1 >=0 && c-1 >=0){
+						z=(int)f.at<uchar>(c-1,i-1);
+					}else{
+						z=0;
+					}
+					lastPixel = a+(b-z)/2;
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
+				}
+			}
+	   	}
+	   	
+	   	void encodeJPEG6(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			int a;
+			int b;
+			int z;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					pixel = f.at<uchar>(c,i);
+					if(i-1 >=0){
+						a=(int)f.at<uchar>(c,i-1);
+					}else{
+						a=0;
+					}
+					if(c-1 >=0){
+						b=(int)f.at<uchar>(c-1,i);
+					}else{
+						b=0;
+					}
+					if(i-1 >=0 && c-1 >=0){
+						z=(int)f.at<uchar>(c-1,i-1);
+					}else{
+						z=0;
+					}
+					lastPixel = b+(a-z)/2;
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
+				}
+			}
+	   	}
+	   	
+	   	void encodeJPEG7(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			int a;
+			int b;
+			int z;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					pixel = f.at<uchar>(c,i);
+					if(i-1 >=0){
+						a=(int)f.at<uchar>(c,i-1);
+					}else{
+						a=0;
+					}
+					if(c-1 >=0){
+						b=(int)f.at<uchar>(c-1,i);
+					}else{
+						b=0;
+					}
+					if(i-1 >=0 && c-1 >=0){
+						z=(int)f.at<uchar>(c-1,i-1);
+					}else{
+						z=0;
+					}
+					lastPixel = (a+b)/2;
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
+				}
+			}
+	   	}
+	   	
+	   	void encodeJPEG_LS(Mat f){
+	   		int lin = f.rows;
+	   		int col = f.cols;
+	   		if (start == 1){
+		   		string width  = to_string(col);
+		   		string height = to_string(lin);
+		   		string frames = to_string(n_frames);
+		   		for (int w = 0; w < 4-width.length();w++){
+		   			width = "0"+width;
+		   		}
+		   		for (int h = 0; h < 4-height.length();h++){
+		   			height = "0"+height;
+		   		}
+		   		for (int f = 0; f < 4-frames.length();f++){
+		   			frames = "0"+frames;
+		   		}
+		   		wbs->writeString(width);
+		   		wbs->writeString(height);
+		   		wbs->writeString(frames);
+		   		wbs->closeNoWrite();
+		   		g = new Golomb(fileName,m,1);
+		   		start=0;
+			}
+			int pixel;
+			int lastPixel = 0;
+			int ind = 1;
+			Mat res(lin,col,0);
+			int count=0;
+			int a;
+			int b;
+			int z;
+			int maximo;
+			int minimo;
+			for(int c = 0; c < lin; c++){
+				for(int i = 0; i < col; i++){
+					pixel = f.at<uchar>(c,i);
+					if(i-1 >=0){
+						a=(int)f.at<uchar>(c,i-1);
+					}else{
+						a=0;
+					}
+					if(c-1 >=0){
+						b=(int)f.at<uchar>(c-1,i);
+					}else{
+						b=0;
+					}
+					if(i-1 >=0 && c-1 >=0){
+						z=(int)f.at<uchar>(c-1,i-1);
+					}else{
+						z=0;
+					}
+					maximo = max(a,b);
+					minimo = min(a,b);
+					if(z>= maximo){
+						lastPixel = minimo;					
+					}else if(z <= minimo){
+						lastPixel = maximo;
+					}else{
+						lastPixel = a+b-z;
+					}
+					g->encode(pixel-lastPixel);
+					res.at<uchar>(c,i) = (unsigned char) (pixel-lastPixel);
+					count++;
+				}
+			}
+	   	}
+	   	
+	   	Mat decodeJPEG1(){
+	   		Mat result;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(i-1 >= 0){
+							lastPixel = (int) result.at<uchar>(c,i-1);
+						}else{
+							lastPixel = 0;
+						}
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
+					}
+				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}
+			}
+			return result;
 	   	}
 	   	
 	   	Mat decodeJPEG2(){
-            /**
-             * Function to decode one JPEG2 encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-            int b;
-			
-            for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if (l - 1 >= 0){
-						b = (int) decodedFrame.at<uchar>(l - 1,c);
+	   		Mat result;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(c-1 >= 0){
+							lastPixel = (int) result.at<uchar>(c-1,i);
+						}else{
+							lastPixel = 0;
+						}
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
 					}
-                    else{
-						b = 0;
+				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(c-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c-1,i);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-
-					int d = golomb->decode();
-
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + b);			
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(c-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c-1,i);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(c-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c-1,i);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(c-1 >= 0){
+								lastPixel = (int) result.at<uchar>(c-1,i);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
 				}
 			}
-			return decodedFrame;
+			return result;
 	   	}
 	   	
 	   	Mat decodeJPEG3(){
-            /**
-             * Function to decode one JPEG3 encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-            int c2;
-
-			for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if ((l - 1) >= 0 && (c - 1) >= 0){
-						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+	   		Mat result;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(c-1 >= 0 && i-1>=0){
+							lastPixel = (int) result.at<uchar>(c-1,i-1);
+						}else{
+							lastPixel = 0;
+						}
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
 					}
-                    else{
-						c2 = 0;
+				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(c-1 >= 0 && i-1>=0){
+								lastPixel = (int) result.at<uchar>(c-1,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					int d = golomb->decode();
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + c2);		
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(c-1 >= 0 && i-1>=0){
+								lastPixel = (int) result.at<uchar>(c-1,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(c-1 >= 0 && i-1>=0){
+								lastPixel = (int) result.at<uchar>(c-1,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(c-1 >= 0 && i-1>=0){
+								lastPixel = (int) result.at<uchar>(c-1,i-1);
+							}else{
+								lastPixel = 0;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
 				}
 			}
-			return decodedFrame;
+			return result;
 	   	}
 	   	
 	   	Mat decodeJPEG4(){
-            /**
-             * Function to decode one JPEG4 encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-			int a, b, c2;
-
-			for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if ((c - 1) >= 0){
-						a = (int) decodedFrame.at<uchar>(l, c - 1);
+	   		Mat result;
+	   		int a;
+			int b;
+			int z;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(i-1 >=0){
+							a=(int)result.at<uchar>(c,i-1);
+						}else{
+							a=0;
+						}
+						if(c-1 >=0){
+							b=(int)result.at<uchar>(c-1,i);
+						}else{
+							b=0;
+						}
+						if(i-1 >=0 && c-1 >=0){
+							z=(int)result.at<uchar>(c-1,i-1);
+						}else{
+							z=0;
+						}
+						lastPixel = a+b-z;
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
 					}
-                    else {
-						a = 0;
+				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+b-z;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					if ((l - 1) >= 0){
-						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+b-z;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-                    else {
-						b = 0;
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+b-z;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					if ((l - 1) >= 0 && (c - 1) >= 0){
-						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+b-z;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-                    else {
-						c2 = 0;
-					}
-
-					int d = golomb->decode();
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a + b - c2);
+					od++;
+					return result;
 				}
 			}
-			return decodedFrame;
+			return result;
 	   	}
 	   	
 	   	Mat decodeJPEG5(){
-            /**
-             * Function to decode one JPEG5 encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-			int a, b, c2;
-
-			for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if ((c - 1) >= 0){
-						a = (int) decodedFrame.at<uchar>(l, c - 1);
+	   		Mat result;
+	   		int a;
+			int b;
+			int z;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(i-1 >=0){
+							a=(int)result.at<uchar>(c,i-1);
+						}else{
+							a=0;
+						}
+						if(c-1 >=0){
+							b=(int)result.at<uchar>(c-1,i);
+						}else{
+							b=0;
+						}
+						if(i-1 >=0 && c-1 >=0){
+							z=(int)result.at<uchar>(c-1,i-1);
+						}else{
+							z=0;
+						}
+						lastPixel = a+(b-z)/2;
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
 					}
-                    else {
-						a = 0;
+				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+(b-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					if ((l - 1) >= 0){
-						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+(b-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-                    else {
-						b = 0;
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+(b-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					if ((l - 1) >= 0 && (c - 1) >= 0){
-						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = a+(b-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-                    else {
-						c2 = 0;
-					}
-
-					int d = golomb->decode();
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a + (b - c2)/2);
+					od++;
+					return result;
 				}
 			}
-			return decodedFrame;
+			return result;
 	   	}
 	   	
 	   	Mat decodeJPEG6(){
-            /**
-             * Function to decode one JPEG6 encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-			int a, b, c2;
-
-			for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if ((c - 1) >= 0){
-						a = (int) decodedFrame.at<uchar>(l, c - 1);
+	   		Mat result;
+	   		int a;
+			int b;
+			int z;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(i-1 >=0){
+							a=(int)result.at<uchar>(c,i-1);
+						}else{
+							a=0;
+						}
+						if(c-1 >=0){
+							b=(int)result.at<uchar>(c-1,i);
+						}else{
+							b=0;
+						}
+						if(i-1 >=0 && c-1 >=0){
+							z=(int)result.at<uchar>(c-1,i-1);
+						}else{
+							z=0;
+						}
+						lastPixel = b+(a-z)/2;
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
 					}
-                    else {
-						a = 0;
+				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = b+(a-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					if ((l - 1) >= 0){
-						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = b+(a-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-                    else {
-						b = 0;
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = b+(a-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					if ((l - 1) >= 0 && (c - 1) >= 0){
-						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = b+(a-z)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-                    else {
-						c2 = 0;
-					}
-
-					int d = golomb->decode();
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + b + (a - c2)/2);
+					od++;
+					return result;
 				}
 			}
-			return decodedFrame;
+			return result;
 	   	}
 	   	
 	   	Mat decodeJPEG7(){
-            /**
-             * Function to decode one JPEG7 encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-			int a, b;
-
-			for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if ((c - 1) >= 0){
-						a = (int) decodedFrame.at<uchar>(l, c - 1);
+	   		Mat result;
+	   		int a;
+			int b;
+			int z;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(i-1 >=0){
+							a=(int)result.at<uchar>(c,i-1);
+						}else{
+							a=0;
+						}
+						if(c-1 >=0){
+							b=(int)result.at<uchar>(c-1,i);
+						}else{
+							b=0;
+						}
+						if(i-1 >=0 && c-1 >=0){
+							z=(int)result.at<uchar>(c-1,i-1);
+						}else{
+							z=0;
+						}
+						lastPixel = (a+b)/2;
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
 					}
-                    else {
-						a = 0;
+				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = (a+b)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					if ((l - 1) >= 0){
-						b = (int) decodedFrame.at<uchar>(l - 1, c);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = (a+b)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-                    else {
-						b = 0;
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = (a+b)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
 					}
-					int d = golomb->decode();
-					decodedFrame.at<uchar>(l, c) = (unsigned char) (d + (a + b)/2);
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							lastPixel = (a+b)/2;
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
 				}
 			}
-			return decodedFrame;
+			return result;
 	   	}
 	   	
 	   	Mat decodeJPEGLS(){
-            /**
-             * Function to decode one JPEG-LS encoded frame
-             * 
-             * @return decoded frame
-             */
-	   		Mat decodedFrame(height, width, 0);
-
-			int a, b, c2;
-
-			for (int l = 0; l < height; l++){
-				for (int c = 0; c < width; c++){
-					if ((c - 1) >= 0){
-						a = (int) decodedFrame.at<uchar>(l, c - 1);
-					}
-                    else {
-						a = 0;
-					}
-					if ((l - 1) >= 0){
-						b = (int) decodedFrame.at<uchar>(l - 1, c);
-					}
-                    else {
-						b = 0;
-					}
-                    if ((l - 1) >= 0 && (c - 1) >= 0){
-						c2 = (int) decodedFrame.at<uchar>(l - 1, c - 1);
-					}
-                    else {
-						c2 = 0;
-					}
-
-                    int d = golomb->decode();
-
-					if (c2 >= max(a,b)) {
-						decodedFrame.at<uchar>(l, c) = (unsigned char) (d + min(a, b));					
-					} else if (c2 <= min(a,b)) {
-						decodedFrame.at<uchar>(l, c) = (unsigned char) (d + max(a, b));	
-					} else {
-						decodedFrame.at<uchar>(l, c) = (unsigned char) (d + a + b - c2);
+	   		Mat result;
+	   		int lastPixel = 0;
+	   		int a;
+			int b;
+			int z;
+			int maximo;
+			int minimo;
+	   		if (typeVideo == 0){
+		   		int lastPixel=0;
+		   		Mat result(linhas,colunas,0);
+				int count = 0;
+				for(int c = 0; c < linhas; c++){
+					for(int i = 0; i < colunas; i++){
+						if(i-1 >=0){
+							a=(int)result.at<uchar>(c,i-1);
+						}else{
+							a=0;
+						}
+						if(c-1 >=0){
+							b=(int)result.at<uchar>(c-1,i);
+						}else{
+							b=0;
+						}
+						if(i-1 >=0 && c-1 >=0){
+							z=(int)result.at<uchar>(c-1,i-1);
+						}else{
+							z=0;
+						}
+						maximo = max(a,b);
+						minimo = min(a,b);
+						if(z>= maximo){
+							lastPixel = minimo;					
+						}else if(z <= minimo){
+							lastPixel = maximo;
+						}else{
+							lastPixel = a+b-z;
+						}
+						int d = g->decode();
+						result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+						count++;				
 					}
 				}
+				return result;
+			} else if (typeVideo == 1) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							maximo = max(a,b);
+							minimo = min(a,b);
+							if(z>= maximo){
+								lastPixel = minimo;					
+							}else if(z <= minimo){
+								lastPixel = maximo;
+							}else{
+								lastPixel = a+b-z;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							maximo = max(a,b);
+							minimo = min(a,b);
+							if(z>= maximo){
+								lastPixel = minimo;					
+							}else if(z <= minimo){
+								lastPixel = maximo;
+							}else{
+								lastPixel = a+b-z;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}
+			} else if (typeVideo == 2) {
+				if (od % 3 == 0){
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c++){
+						for(int i = 0; i < colunas; i++){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							maximo = max(a,b);
+							minimo = min(a,b);
+							if(z>= maximo){
+								lastPixel = minimo;					
+							}else if(z <= minimo){
+								lastPixel = maximo;
+							}else{
+								lastPixel = a+b-z;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}else if (od % 3 == 1 || od % 3 == 2) {
+					int lastPixel=0;
+		   			Mat result(linhas,colunas,0);
+					int count = 0;
+					for(int c = 0; c < linhas; c+=2){
+						for(int i = 0; i < colunas; i+=2){
+							if(i-1 >=0){
+								a=(int)result.at<uchar>(c,i-1);
+							}else{
+								a=0;
+							}
+							if(c-1 >=0){
+								b=(int)result.at<uchar>(c-1,i);
+							}else{
+								b=0;
+							}
+							if(i-1 >=0 && c-1 >=0){
+								z=(int)result.at<uchar>(c-1,i-1);
+							}else{
+								z=0;
+							}
+							maximo = max(a,b);
+							minimo = min(a,b);
+							if(z>= maximo){
+								lastPixel = minimo;					
+							}else if(z <= minimo){
+								lastPixel = maximo;
+							}else{
+								lastPixel = a+b-z;
+							}
+							int d = g->decode();
+							result.at<uchar>(c,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c,i+1) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i) = (unsigned char) (d+lastPixel);
+							result.at<uchar>(c+1,i+1) = (unsigned char) (d+lastPixel);
+							count++;				
+						}
+					}
+					od++;
+					return result;
+				}
 			}
-			return decodedFrame;
+			return result;
 	   	}
-
-        void writeFrameSize(int lines, int columns, Mat frame) {
-            /**
-             * Function to write some info at the begining of
-             * a to be encrypted file 
-             */
-            if (flag) {
-                cout << "Writing file info..." << endl;
-                string width  = to_string(columns);
-                string height = to_string(lines);
-                string frames = to_string(framesNumber);
-
-                for (int w = 0; w < 4 - width.length(); w++){
-                    width = "0" + width;
-                }
-                for (int h = 0; h < 4 - height.length(); h++){
-                    height = "0" + height;
-                }
-                for (int f = 0; f < 4 - frames.length(); f++){
-                    frames = "0" + frames;
-                }
-
-                wbs->writeString(width);
-                wbs->writeString(height);
-                wbs->writeString(frames);
-
-                wbs->closeNoWrite();
-                golomb = new Golomb(filename, m, 1);
-
-                flag = 0;
-            }
-        }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
