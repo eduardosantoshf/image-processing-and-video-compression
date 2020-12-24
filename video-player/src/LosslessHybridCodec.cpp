@@ -31,6 +31,21 @@ class LosslessHybridCodec {
 	public: 
 
 	   	LosslessHybridCodec(string v, int bs, int ss, int tv, int tp, int M, int pe, int f, string outFile){
+
+			/**
+			 * LosslessHybridCodec Constructor
+			 * 
+			 * @param v name of the file to be encoded
+			 * @param bs block size
+			 * @param ss search space
+			 * @param tv type of the videp
+			 * @param tp type of the predictor
+			 * @param M value of m
+			 * @param pe periodicity
+			 * @param f flag
+			 * @param outFile name of the encoded file
+			 */
+
 	   		File = v;
 	   		block_size = bs;
 	   		search_space = ss;
@@ -57,6 +72,11 @@ class LosslessHybridCodec {
 	   	}
 	   	
 	   	void encode(){
+
+			/**
+			 * Function to encode the video
+			 */
+
 	   		int count = 1;
 	   		Mat frame;
 	   		Mat frame1;
@@ -583,8 +603,12 @@ class LosslessHybridCodec {
 	   		p->close();
 	   	}
 	   	
-	   	//! Decode the video by blocks encoded in the file, switch to decide with preditor encoding was used after a initial read of the header
 	   	int decode(){
+
+			/**
+			 * Function to decode the file
+			 */
+
 	   		Mat result;
 			Mat m1;
 	   		Mat m2;
