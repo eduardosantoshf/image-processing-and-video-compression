@@ -72,6 +72,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0d7bcfed56454551d3af9b264b8a9ad0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_w_bit_stream.html#a0d7bcfed56454551d3af9b264b8a9ad0">WBitStream</a> (string file)</td></tr>
+<tr class="memdesc:a0d7bcfed56454551d3af9b264b8a9ad0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_w_bit_stream.html">WBitStream</a> Constructor.  <a href="class_w_bit_stream.html#a0d7bcfed56454551d3af9b264b8a9ad0">More...</a><br /></td></tr>
 <tr class="separator:a0d7bcfed56454551d3af9b264b8a9ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6e95652bfe33eb4261cfc7f5d3fbf4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_w_bit_stream.html#ac6e95652bfe33eb4261cfc7f5d3fbf4b">writeBit</a> (int i)</td></tr>
 <tr class="separator:ac6e95652bfe33eb4261cfc7f5d3fbf4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -81,6 +82,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac058bd7943b9de2b24884f71a5b80a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fc629dfad5d9a287fba5063f559aa66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_w_bit_stream.html#a7fc629dfad5d9a287fba5063f559aa66">close</a> ()</td></tr>
 <tr class="separator:a7fc629dfad5d9a287fba5063f559aa66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a679871dbbcb428ba03ea473eb7b5b5aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_w_bit_stream.html#a679871dbbcb428ba03ea473eb7b5b5aa">closeNoWrite</a> ()</td></tr>
+<tr class="separator:a679871dbbcb428ba03ea473eb7b5b5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0d7bcfed56454551d3af9b264b8a9ad0"></a>
@@ -107,6 +110,14 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p><a class="el" href="class_w_bit_stream.html">WBitStream</a> Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>given file </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -132,6 +143,33 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Function to close the file, with write</p>
+
+</div>
+</div>
+<a id="a679871dbbcb428ba03ea473eb7b5b5aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a679871dbbcb428ba03ea473eb7b5b5aa">&#9670;&nbsp;</a></span>closeNoWrite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WBitStream::closeNoWrite </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Function to close the file</p>
 
 </div>
 </div>
@@ -158,6 +196,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Function to write individual bits on file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>bbit to be written</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -194,6 +239,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Function to write N bits on file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>number to be written </td></tr>
+    <tr><td class="paramname">n</td><td>number of bits used to write the number</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -220,6 +273,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Function to write a string on a file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>string to be written</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

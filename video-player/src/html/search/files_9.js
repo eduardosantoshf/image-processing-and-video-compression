@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['losslessintraframecodec_2ecpp_138',['LosslessIntraFrameCodec.cpp',['../_lossless_intra_frame_codec_8cpp.html',1,'']]]
+  ['golomb_2ecpp_140',['Golomb.cpp',['../_golomb_8cpp.html',1,'']]]
 ];

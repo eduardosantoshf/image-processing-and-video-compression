@@ -64,12 +64,6 @@ $(function() {
 &#160;
 
 <h3><a id="index_b"></a>- b -</h3><ul>
-<li>base2Decode()
-: <a class="el" href="class_golomb.html#ab1a2325d212ef2cee7267628a0fc0a3d">Golomb</a>
-</li>
-<li>base2Encode()
-: <a class="el" href="class_golomb.html#a7a6ab72e7727a310b2c14168556a63a8">Golomb</a>
-</li>
 <li>BitStream()
 : <a class="el" href="class_bit_stream.html#a0af9676451891b51f56f8a33e8173cee">BitStream</a>
 </li>
@@ -79,6 +73,7 @@ $(function() {
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>close()
 : <a class="el" href="class_golomb.html#ab928e9d8241432f201c1c8d72b544959">Golomb</a>
+, <a class="el" href="class_predictor.html#ab9af0d8627ea83e15d44dcf1af32ddc8">Predictor</a>
 , <a class="el" href="class_r_bit_stream.html#a8cb3115ab14c7f0c6af97c1d4452f7d2">RBitStream</a>
 , <a class="el" href="class_w_bit_stream.html#a7fc629dfad5d9a287fba5063f559aa66">WBitStream</a>
 </li>
@@ -88,12 +83,19 @@ $(function() {
 <li>closeFO()
 : <a class="el" href="class_bit_stream.html#a4d238d7a4337708fd9f06ff85b5514b1">BitStream</a>
 </li>
+<li>closeNoWrite()
+: <a class="el" href="class_w_bit_stream.html#a679871dbbcb428ba03ea473eb7b5b5aa">WBitStream</a>
+</li>
 </ul>
 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>decode()
-: <a class="el" href="class_golomb.html#a19bdf5f26292858dac0dae9e380dda75">Golomb</a>
+: <a class="el" href="class_golomb.html#abfc8d58261fc9bcc5d5e2559aed4a288">Golomb</a>
+, <a class="el" href="class_lossless_hybrid_codec.html#a50afc639af2e951724accd643e5503c9">LosslessHybridCodec</a>
+</li>
+<li>decode_by_blocks()
+: <a class="el" href="class_predictor.html#a12391a7980024147b6eb531cdcdbb128">Predictor</a>
 </li>
 <li>decodeJPEG1()
 : <a class="el" href="class_predictor.html#aa42a0b8756695718ccec5a0fe9f433da">Predictor</a>
@@ -124,44 +126,54 @@ $(function() {
 
 <h3><a id="index_e"></a>- e -</h3><ul>
 <li>encode()
-: <a class="el" href="class_golomb.html#a46e3cd4b45583b685e2441aff8f63e1f">Golomb</a>
+: <a class="el" href="class_golomb.html#ac23190a357af7db62de1f4a213c6ce36">Golomb</a>
+, <a class="el" href="class_lossless_hybrid_codec.html#aca30016d957c0d878ec701e6866a6392">LosslessHybridCodec</a>
+</li>
+<li>encode_by_blocks()
+: <a class="el" href="class_predictor.html#a27cbb55cbd0592470dc1aac86fd2ebfe">Predictor</a>
 </li>
 <li>encodeJPEG1()
-: <a class="el" href="class_predictor.html#a9af9ee51e2af48efe56f8ecf4a22c111">Predictor</a>
+: <a class="el" href="class_predictor.html#a5fd9a94686ea3c3a677245c2f710dcfd">Predictor</a>
 </li>
 <li>encodeJPEG2()
-: <a class="el" href="class_predictor.html#a02259cf393ef1e605289d65e11a092be">Predictor</a>
+: <a class="el" href="class_predictor.html#aaf232155aa40725840dda8c17ea17903">Predictor</a>
 </li>
 <li>encodeJPEG3()
-: <a class="el" href="class_predictor.html#a99250cd0f4ba7c0d5c6f54551789f436">Predictor</a>
+: <a class="el" href="class_predictor.html#af55c460eef09f92921b7ae3760eb584a">Predictor</a>
 </li>
 <li>encodeJPEG4()
-: <a class="el" href="class_predictor.html#aaeee567518dd1bab70621fa7af4225f7">Predictor</a>
+: <a class="el" href="class_predictor.html#a8ce92a4bd919d6b0f6f615364cb6686c">Predictor</a>
 </li>
 <li>encodeJPEG5()
-: <a class="el" href="class_predictor.html#a8a8bc2a65003b4f4741e3e8b241a9c59">Predictor</a>
+: <a class="el" href="class_predictor.html#ae73568146a6692bf8630103f133e9fc9">Predictor</a>
 </li>
 <li>encodeJPEG6()
-: <a class="el" href="class_predictor.html#ac033308e4000e0152d615c931caa1fe8">Predictor</a>
+: <a class="el" href="class_predictor.html#ab0f69ad947d8a2ce73629b6817de1b36">Predictor</a>
 </li>
 <li>encodeJPEG7()
-: <a class="el" href="class_predictor.html#a63eb4951be1fdd3b2104aa6e1d6fef71">Predictor</a>
+: <a class="el" href="class_predictor.html#aff86ac261b96a725987a61b80ea5840e">Predictor</a>
 </li>
-<li>encodeJPEGLS()
-: <a class="el" href="class_predictor.html#a1055416d935ee186e86fb7700853697d">Predictor</a>
+<li>encodeJPEG_LS()
+: <a class="el" href="class_predictor.html#a1ed4aedf10838002dca96a8c908c2141">Predictor</a>
 </li>
 </ul>
 
 
 <h3><a id="index_g"></a>- g -</h3><ul>
-<li>getFramesNumber()
-: <a class="el" href="class_predictor.html#a36ff00f1adc5d40fa1abb27beb42d782">Predictor</a>
+<li>get_frames()
+: <a class="el" href="class_predictor.html#a9c8ba6a7928fc2ef03c5188169f75529">Predictor</a>
 </li>
-<li>getPredictorType()
-: <a class="el" href="class_predictor.html#af8f423587f1977ba9a8e3bde8bc8bf63">Predictor</a>
+<li>get_period()
+: <a class="el" href="class_predictor.html#aa9e0dd810b5fa3fc2cf09d7b02987158">Predictor</a>
+</li>
+<li>get_type()
+: <a class="el" href="class_predictor.html#a0e55925774e2c3a7851ee6d31c6a364e">Predictor</a>
+</li>
+<li>get_VideoType()
+: <a class="el" href="class_predictor.html#a8eb46bee42870d62a1a99a70d9379dc8">Predictor</a>
 </li>
 <li>Golomb()
-: <a class="el" href="class_golomb.html#a7a7cb8ac22578329b6fa763b995a6fc0">Golomb</a>
+: <a class="el" href="class_golomb.html#a15968ad170e33dfa72538641078e85db">Golomb</a>
 </li>
 </ul>
 
@@ -173,6 +185,9 @@ $(function() {
 <li>losslessEncode()
 : <a class="el" href="class_lossless_intra_frame_codec.html#ab0f659f9342bce1c41260d4d4435ab1d">LosslessIntraFrameCodec</a>
 </li>
+<li>LosslessHybridCodec()
+: <a class="el" href="class_lossless_hybrid_codec.html#a9b28f00ad5b3f609860bc38796a56db0">LosslessHybridCodec</a>
+</li>
 <li>LosslessIntraFrameCodec()
 : <a class="el" href="class_lossless_intra_frame_codec.html#ac0efbdcd4ffd41245320f5dc222ceddc">LosslessIntraFrameCodec</a>
 </li>
@@ -181,7 +196,7 @@ $(function() {
 
 <h3><a id="index_p"></a>- p -</h3><ul>
 <li>Predictor()
-: <a class="el" href="class_predictor.html#ab826838af82dd6490b50c0f2e47c03a3">Predictor</a>
+: <a class="el" href="class_predictor.html#a3b5f7849462769d35a23f17a433a5379">Predictor</a>
 </li>
 </ul>
 
@@ -208,18 +223,11 @@ $(function() {
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>set_last_frame()
+: <a class="el" href="class_predictor.html#a45293f76b39b17d094424ee21fac2d6e">Predictor</a>
+</li>
 <li>SkipNBytes()
 : <a class="el" href="class_golomb.html#ab41b0a8532ebd5844e65802c2281ce68">Golomb</a>
-</li>
-</ul>
-
-
-<h3><a id="index_t"></a>- t -</h3><ul>
-<li>truncatedDecode()
-: <a class="el" href="class_golomb.html#a85650c80ad07054d1e0a5727d35e6e6a">Golomb</a>
-</li>
-<li>truncatedEncode()
-: <a class="el" href="class_golomb.html#a87294e329bbfe8b61564926630fd9a4a">Golomb</a>
 </li>
 </ul>
 
@@ -231,9 +239,6 @@ $(function() {
 <li>writeBit()
 : <a class="el" href="class_bit_stream.html#aa86adee7779cf956e70348f392a1a985">BitStream</a>
 , <a class="el" href="class_w_bit_stream.html#ac6e95652bfe33eb4261cfc7f5d3fbf4b">WBitStream</a>
-</li>
-<li>writeFrameSize()
-: <a class="el" href="class_predictor.html#abcf6e24f8f400568db7cdbef2d30dde8">Predictor</a>
 </li>
 <li>writeNBits()
 : <a class="el" href="class_bit_stream.html#a5c2ceaa79041ce56d0667921a4756714">BitStream</a>

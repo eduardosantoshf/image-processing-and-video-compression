@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['threshold_5fimage_102',['threshold_image',['../methods_8cpp.html#af40ec58b7892a815b6f5f0eb52d39898',1,'threshold_image(Mat initial_image, int t_value, int t_type):&#160;methods.cpp'],['../methods_8hpp.html#a323113f97a4162b0cdf0d18f7f1eb2a9',1,'threshold_image(cv::Mat initial_image, int t_value, int t_type):&#160;methods.hpp']]],
-  ['truncateddecode_103',['truncatedDecode',['../class_golomb.html#a85650c80ad07054d1e0a5727d35e6e6a',1,'Golomb']]],
-  ['truncatedencode_104',['truncatedEncode',['../class_golomb.html#a87294e329bbfe8b61564926630fd9a4a',1,'Golomb']]],
-  ['type_105',['type',['../class_bit_stream.html#aeac51468e7324b95f10122b88c461893',1,'BitStream']]]
+  ['scharr_5fderivative_101',['scharr_derivative',['../methods_8cpp.html#a97d987936f4902f2ae4e9f97a83c4f59',1,'scharr_derivative(Mat initial_image, int ddepth, int x, int y, int scale, int delta):&#160;methods.cpp'],['../methods_8hpp.html#a1dab37b60884934e550ca9f7a319c11c',1,'scharr_derivative(cv::Mat initial_image, int ddepth, int x, int y, int scale, int delta):&#160;methods.hpp']]],
+  ['set_5flast_5fframe_102',['set_last_frame',['../class_predictor.html#a45293f76b39b17d094424ee21fac2d6e',1,'Predictor']]],
+  ['skipnbytes_103',['SkipNBytes',['../class_golomb.html#ab41b0a8532ebd5844e65802c2281ce68',1,'Golomb']]],
+  ['sobel_5fderivative_104',['sobel_derivative',['../methods_8cpp.html#a1c5d31c5bda46b03210255682097cf7a',1,'sobel_derivative(Mat initial_image, int ddepth, int x, int y, int ksize, int scale, int delta):&#160;methods.cpp'],['../methods_8hpp.html#ac976642ba3f7d48a3ad9fe4ff483097a',1,'sobel_derivative(cv::Mat initial_image, int ddepth, int x, int y, int ksize, int scale, int delta):&#160;methods.hpp']]],
+  ['src_105',['src',['../2__g_8cpp.html#a1e913916bcdcdedea73cf90ec6381373',1,'src():&#160;2_g.cpp'],['../2__i_8cpp.html#a1e913916bcdcdedea73cf90ec6381373',1,'src():&#160;2_i.cpp']]],
+  ['src_5fgray_106',['src_gray',['../2__i_8cpp.html#a021abc886c1ace1e39e725b8bbaf84ef',1,'2_i.cpp']]]
 ];

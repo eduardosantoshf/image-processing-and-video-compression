@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['predictor_2ecpp_141',['Predictor.cpp',['../_predictor_8cpp.html',1,'']]]
+  ['methods_2ecpp_143',['methods.cpp',['../methods_8cpp.html',1,'']]],
+  ['methods_2ehpp_144',['methods.hpp',['../methods_8hpp.html',1,'']]]
 ];

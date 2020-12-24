@@ -1,10 +1,5 @@
 var searchData=
 [
-  ['wbitstream_106',['WBitStream',['../class_w_bit_stream.html',1,'WBitStream'],['../class_w_bit_stream.html#a0d7bcfed56454551d3af9b264b8a9ad0',1,'WBitStream::WBitStream()']]],
-  ['wbitstream_2ecpp_107',['WBitStream.cpp',['../_w_bit_stream_8cpp.html',1,'']]],
-  ['window_5fname_108',['window_name',['../2__g_8cpp.html#a644277760c7d66875d7624567494b73c',1,'window_name():&#160;2_g.cpp'],['../2__i_8cpp.html#a644277760c7d66875d7624567494b73c',1,'window_name():&#160;2_i.cpp']]],
-  ['writebit_109',['writeBit',['../class_bit_stream.html#aa86adee7779cf956e70348f392a1a985',1,'BitStream::writeBit()'],['../class_w_bit_stream.html#ac6e95652bfe33eb4261cfc7f5d3fbf4b',1,'WBitStream::writeBit()']]],
-  ['writeframesize_110',['writeFrameSize',['../class_predictor.html#abcf6e24f8f400568db7cdbef2d30dde8',1,'Predictor']]],
-  ['writenbits_111',['writeNBits',['../class_bit_stream.html#a5c2ceaa79041ce56d0667921a4756714',1,'BitStream::writeNBits()'],['../class_w_bit_stream.html#a4e7d20771a5c577c381623eae0736c77',1,'WBitStream::writeNBits()']]],
-  ['writestring_112',['writeString',['../class_w_bit_stream.html#ac058bd7943b9de2b24884f71a5b80a9c',1,'WBitStream']]]
+  ['threshold_5fimage_107',['threshold_image',['../methods_8cpp.html#af40ec58b7892a815b6f5f0eb52d39898',1,'threshold_image(Mat initial_image, int t_value, int t_type):&#160;methods.cpp'],['../methods_8hpp.html#a323113f97a4162b0cdf0d18f7f1eb2a9',1,'threshold_image(cv::Mat initial_image, int t_value, int t_type):&#160;methods.hpp']]],
+  ['type_108',['type',['../class_bit_stream.html#aeac51468e7324b95f10122b88c461893',1,'BitStream']]]
 ];
