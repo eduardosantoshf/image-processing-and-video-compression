@@ -18,6 +18,14 @@ class BitStream {
         char type;
 
         BitStream(string fn, char op) {
+
+            /**
+             * BitStream Constructor
+             * 
+             * @param fn initial file name
+             * @param op flag
+             */
+            
             filename = fn;
             type = op;
             if (type == 'w')
@@ -57,11 +65,13 @@ class BitStream {
         }
 
        int readBit() {
-            char bit;
-            /**
+
+           /**
              * Function used to read one bit at a time from
              * the given file
              */
+
+            char bit;
 
             if (pos2 == -1) {
                 fsi.read(reinterpret_cast<char *>(&readBuff), 1);
@@ -77,6 +87,7 @@ class BitStream {
        }
 
        void readNBits(int n) {
+
            /**
              * Function used to read N bits at a time from
              * the given file
@@ -84,6 +95,7 @@ class BitStream {
              * @param n number of bits we want to read, 
              * starting from the first one (index 0)
              */
+            
             for (int i = 0; i < n; i++) {
                 cout << readBit() << "\n";
             }
