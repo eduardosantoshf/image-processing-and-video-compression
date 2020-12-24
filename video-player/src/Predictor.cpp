@@ -33,6 +33,21 @@ class Predictor {
 	public: 
 	
 	   	Predictor(int Type, int M,string file,int TypeVideo,int n_f,int flag,int bs,int ss,int peri){
+
+			/**
+			 * Predictor Constructor
+			 * 
+			 * @param Type type of the predictor
+			 * @param M value of m
+			 * @param file given file name
+			 * @param TypeVideo type of video
+			 * @param n_f number of frames
+			 * @param flag flag
+			 * @param bs block size
+			 * @param ss search space
+			 * @param peri periodicity
+			 */
+
 	   		fileName=file;
 	   		if (flag == 1){
 	   			block_size = bs;
@@ -78,41 +93,80 @@ class Predictor {
 	   	}
 	    
 	    	int get_frames(){
+
+				/**
+				 * Function to get the number of frames
+				 */
+
 	    		return n_frames;
 	    	}
 	    	
 	    	int get_type(){
+
+				/**
+				 * Function to get the predictor type
+				 */
+				
 	    		return type;
 	    	}
 	    	
 	    	int get_VideoType(){
+
+				/**
+				 * Function to get the video type
+				 */
+
 	    		return typeVideo;
 	    	}
 	    	
 	    	void set_last_frame(vector<Mat> planes){
+
+				/**
+				 * Function to set the last frame as the given frame
+				 * 
+				 * @param planes channels of the frame
+				 */
+
 			lastFrame = planes;
 	    	}
 	    	
 	    	int get_period(){
+
+				/**
+				 * Function to get the periodicity
+				 */
+
 	    		return period;
 	    	}
 	    	
 	    	void close(){
+
+				/**
+				 * Function to close the golomb
+				 */
+
 	    		g->close();
 	    	}
 	    	
 	    	void encode_by_blocks(vector<Mat> planes){
-	    	int lin;
-	   		int col;
-	   		int count = 0;
-	   		int count_blocks= 0;
-	   		Mat current_block;
-	   		Mat possible_block;
-	   		Mat min_block;
-	   		int lastSum = 100000;
-	   		int currentSum = 0;
-	   		int d_x=0;
-	   		int d_y=0;
+
+				/**
+				 * Function to encode the given frame by blocks
+				 * 
+				 * @param planes channels of the frame
+				 */
+
+				int lin;
+				int col;
+				int count = 0;
+				int count_blocks= 0;
+				Mat current_block;
+				Mat possible_block;
+				Mat min_block;
+				int lastSum = 100000;
+				int currentSum = 0;
+				int d_x=0;
+				int d_y=0;
 	    		for(Mat matrix :planes){
 	    			lin = matrix.rows;
 	    			col = matrix.cols;
@@ -155,7 +209,12 @@ class Predictor {
 	    	}
 	    	
 	    	vector<Mat> decode_by_blocks(){
-	    	    	vector<Mat> res;
+
+				/**
+				 * Function to decode by blocks
+				 */
+
+	    	    vector<Mat> res;
 	    		if (typeVideo == 0){
 	    			Mat m1(linhas,colunas,0);
 	    			Mat m2(linhas,colunas,0);
@@ -345,6 +404,13 @@ class Predictor {
 	    	}
 	    	
 	   	void encodeJPEG1(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG1
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -388,6 +454,13 @@ class Predictor {
 	   	}
 
 	   	void encodeJPEG2(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG2
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -431,6 +504,13 @@ class Predictor {
 	   	}
 	   	
 	   	void encodeJPEG3(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG3
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -474,6 +554,13 @@ class Predictor {
 	   	}
 	   	
 	   	void encodeJPEG4(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG4
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -531,6 +618,13 @@ class Predictor {
 	   	}
 	   	
 	   	void encodeJPEG5(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG5
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -588,6 +682,13 @@ class Predictor {
 	   	}
 	   	
 	   	void encodeJPEG6(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG6
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -645,6 +746,13 @@ class Predictor {
 	   	}
 	   	
 	   	void encodeJPEG7(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG7
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -702,6 +810,13 @@ class Predictor {
 	   	}
 	   	
 	   	void encodeJPEG_LS(Mat f){
+
+			/**
+			 * Function to encode given frame using JPEG-LS
+			 * 
+			 * @param f given frame
+			 */
+
 	   		int lin = f.rows;
 	   		int col = f.cols;
 	   		if (start == 1){
@@ -769,6 +884,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG1(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG1
+			 */
+
 	   		Mat result;
 	   		if (typeVideo == 0){
 		   		int lastPixel=0;
@@ -872,6 +992,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG2(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG2
+			 */
+			
 	   		Mat result;
 	   		if (typeVideo == 0){
 		   		int lastPixel=0;
@@ -975,6 +1100,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG3(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG3
+			 */
+
 	   		Mat result;
 	   		if (typeVideo == 0){
 		   		int lastPixel=0;
@@ -1078,6 +1208,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG4(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG4
+			 */
+
 	   		Mat result;
 	   		int a;
 			int b;
@@ -1239,6 +1374,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG5(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG5
+			 */
+
 	   		Mat result;
 	   		int a;
 			int b;
@@ -1400,6 +1540,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG6(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG6
+			 */
+
 	   		Mat result;
 	   		int a;
 			int b;
@@ -1561,6 +1706,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEG7(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG7
+			 */
+
 	   		Mat result;
 	   		int a;
 			int b;
@@ -1722,6 +1872,11 @@ class Predictor {
 	   	}
 	   	
 	   	Mat decodeJPEGLS(){
+
+			/**
+			 * Function to decode a frame encoded in JPEG-LS
+			 */
+
 	   		Mat result;
 	   		int lastPixel = 0;
 	   		int a;
