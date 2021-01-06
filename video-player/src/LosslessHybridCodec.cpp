@@ -636,7 +636,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -649,7 +649,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -676,7 +676,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -688,8 +688,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -716,7 +716,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -728,8 +728,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
@@ -751,7 +751,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -764,7 +764,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -791,7 +791,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -803,8 +803,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -831,7 +831,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -843,8 +843,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
@@ -866,7 +866,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -879,7 +879,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -906,7 +906,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -918,8 +918,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -946,7 +946,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -958,8 +958,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
@@ -981,7 +981,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -994,7 +994,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -1021,7 +1021,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1033,8 +1033,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -1061,7 +1061,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1073,8 +1073,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
@@ -1096,7 +1096,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1109,7 +1109,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -1136,7 +1136,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1148,8 +1148,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -1176,7 +1176,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1188,8 +1188,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
@@ -1211,7 +1211,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1224,7 +1224,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -1251,7 +1251,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1263,8 +1263,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -1291,7 +1291,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1303,8 +1303,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
@@ -1326,7 +1326,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1339,7 +1339,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -1366,7 +1366,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1378,8 +1378,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -1406,7 +1406,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1418,8 +1418,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
@@ -1441,7 +1441,7 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1454,7 +1454,7 @@ class LosslessHybridCodec {
 									break;
 								}
 								p->set_last_frame(channels);
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 1){
@@ -1481,7 +1481,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1493,8 +1493,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}else if (tipo == 2){
@@ -1521,7 +1521,7 @@ class LosslessHybridCodec {
 										result2.at<uchar>(c/2,i/2) = m3.at<uchar>(c,i);
 									}
 								}
-								cout << "Decoding frame: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
 							}else{
 			   					channels = p->decode_by_blocks();
@@ -1533,8 +1533,8 @@ class LosslessHybridCodec {
 								if(waitKey(30) >=0){
 									break;
 								}
-								cout << "Decoding frame: " << b+1 << endl;
-								cout << "Decoding frame by blocks: " << b+1 << endl;
+								//cout << "Decoding frame: " << b+1 << endl;
+								cout << "Decoding frame " << b + 1 << " by blocks" << endl;
 							}
 							count++;
 						}
