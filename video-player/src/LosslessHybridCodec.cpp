@@ -25,7 +25,7 @@ class LosslessHybridCodec {
 		int m;
 		int period;
 		int flag;
-		int n_of_current_frame;
+		int current_frame_number;
 		Predictor *p;
 		
 	public: 
@@ -38,7 +38,7 @@ class LosslessHybridCodec {
 			 * @param v name of the file to be encoded
 			 * @param bs block size
 			 * @param ss search space
-			 * @param tv type of the videp
+			 * @param tv type of the video
 			 * @param tp type of the predictor
 			 * @param M value of m
 			 * @param pe periodicity
@@ -54,7 +54,7 @@ class LosslessHybridCodec {
 	   		m = M;
 	   		period = pe;
 	   		flag = f;
-	   		n_of_current_frame = 0;
+	   		current_frame_number = 0;
 		   	if (flag == 1){
 		   		Mat fra;
 		   		VideoCapture capa(File);
@@ -65,11 +65,55 @@ class LosslessHybridCodec {
 		   			capa >> fra;
 		   		}
 	   			p = new Predictor(pred,m,outFile,type,count,flag,block_size,search_space,period);
-	   		}else{
+	   		} else {
 	   			p = new Predictor(0,0,outFile,0,0,0,0,0,0);
 	   		}
 
 	   	}
+
+		vector<Mat> RGB_to_YUV422(Mat frame, vector<Mat> planes) {
+			cvtColor(frame, frame, COLOR_RGB2YUV);
+			split(frame, planes);
+
+			int lines = planes[0].rows;
+			int columns = planes[0].cols;
+
+			Mat new_plane_1(lines,columns / 2, 0);
+			Mat new_plane_2(lines,columns / 2, 0);
+
+			for(int c = 0; c < lines; c++){
+				for(int i = 0; i < columns; i += 2){
+					new_plane_1.at<uchar>(c, i / 2) = planes[1].at<uchar>(c, i);
+					new_plane_2.at<uchar>(c, i / 2) = planes[2].at<uchar>(c, i);
+				}
+			}
+
+			vector<Mat> yuv422_planes = {planes[0], new_plane_1, new_plane_2};
+
+			return yuv422_planes;
+		}
+
+		vector<Mat> RGB_to_YUV420(Mat frame, vector<Mat> planes) {
+			cvtColor(frame, frame, COLOR_RGB2YUV );
+			split(frame, planes);
+
+			int lines = planes[0].rows;
+			int columns = planes[0].cols;
+
+			Mat new_plane_1(lines / 2, columns / 2, 0);
+			Mat new_plane_2(lines / 2, columns / 2, 0);
+
+			for(int c = 0; c < lines; c += 2){
+				for(int i = 0; i < columns; i += 2){
+					new_plane_1.at<uchar>(c / 2,i / 2) = planes[1].at<uchar>(c, i);
+					new_plane_2.at<uchar>(c / 2,i / 2) = planes[2].at<uchar>(c, i);
+				}
+			}
+
+			vector<Mat> yuv420_planes = {planes[0], new_plane_1, new_plane_2};
+
+			return yuv420_planes;
+		}
 	   	
 	   	void encode(){
 
@@ -86,126 +130,88 @@ class LosslessHybridCodec {
 	   			case 0:
 	   				while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG1(planes[0]);
 								p->encodeJPEG1(planes[1]);
 								p->encodeJPEG1(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG1(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG1(planes[0]);
-								p->encodeJPEG1(result1);
-								p->encodeJPEG1(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
+
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG1(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG1(planes[0]);
-								p->encodeJPEG1(result1);
-								p->encodeJPEG1(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 	   				break;
 	   			case 1:
 	   				while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG2(planes[0]);
 								p->encodeJPEG2(planes[1]);
 								p->encodeJPEG2(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG2(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG2(planes[0]);
-								p->encodeJPEG2(result1);
-								p->encodeJPEG2(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
+
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG2(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG2(planes[0]);
-								p->encodeJPEG2(result1);
-								p->encodeJPEG2(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+							
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 
@@ -214,63 +220,44 @@ class LosslessHybridCodec {
 		   		case 2:
 	   				while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG3(planes[0]);
 								p->encodeJPEG3(planes[1]);
 								p->encodeJPEG3(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG3(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG3(planes[0]);
-								p->encodeJPEG3(result1);
-								p->encodeJPEG3(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
+
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG3(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG3(planes[0]);
-								p->encodeJPEG3(result1);
-								p->encodeJPEG3(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+							
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 
@@ -279,63 +266,44 @@ class LosslessHybridCodec {
 	  	   		case 3:
 	   				while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG4(planes[0]);
 								p->encodeJPEG4(planes[1]);
 								p->encodeJPEG4(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG4(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG4(planes[0]);
-								p->encodeJPEG4(result1);
-								p->encodeJPEG4(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
+
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG4(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG4(planes[0]);
-								p->encodeJPEG4(result1);
-								p->encodeJPEG4(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+							
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 
@@ -344,63 +312,44 @@ class LosslessHybridCodec {
 		   		case 4:
 	   				while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG5(planes[0]);
 								p->encodeJPEG5(planes[1]);
 								p->encodeJPEG5(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG5(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG5(planes[0]);
-								p->encodeJPEG5(result1);
-								p->encodeJPEG5(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
+
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG5(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG5(planes[0]);
-								p->encodeJPEG5(result1);
-								p->encodeJPEG5(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+							
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 
@@ -409,63 +358,44 @@ class LosslessHybridCodec {
 	  			case 5:
 	   				while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG6(planes[0]);
 								p->encodeJPEG6(planes[1]);
 								p->encodeJPEG6(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG6(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG6(planes[0]);
-								p->encodeJPEG6(result1);
-								p->encodeJPEG6(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
+
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG6(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG6(planes[0]);
-								p->encodeJPEG6(result1);
-								p->encodeJPEG6(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+							
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 
@@ -474,128 +404,89 @@ class LosslessHybridCodec {
  	   			case 6:
 	   				while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG7(planes[0]);
 								p->encodeJPEG7(planes[1]);
 								p->encodeJPEG7(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG7(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG7(planes[0]);
-								p->encodeJPEG7(result1);
-								p->encodeJPEG7(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG7(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG7(planes[0]);
-								p->encodeJPEG7(result1);
-								p->encodeJPEG7(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+							
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 
 	   				break;	   	
 
 	   			case 7:
-		   				while(!frame.empty()){
+		   			while(!frame.empty()){
 						vector<Mat> planes;
+						vector<Mat> new_planes;
+						
 						if (type == 0) {
-							if (n_of_current_frame % period == 0){
+							if (current_frame_number % period == 0){
 								split(frame, planes);
 								p->encodeJPEG_LS(planes[0]);
 								p->encodeJPEG_LS(planes[1]);
 								p->encodeJPEG_LS(planes[2]);
-							}else{
+							} else {
 								split(frame, planes);
 								p->encode_by_blocks(planes);
 							}
 							p->set_last_frame(planes);
 						} else if (type == 1){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas,colunas/2,0);
-							Mat result2(linhas,colunas/2,0);
-							for(int c = 0; c < linhas; c++){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV422(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG_LS(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG_LS(planes[0]);
-								p->encodeJPEG_LS(result1);
-								p->encodeJPEG_LS(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
+
 						}else if (type == 2){
-							cvtColor(frame, frame, COLOR_RGB2YUV );
-							split(frame, planes);
-							int linhas = planes[0].rows;
-							int colunas = planes[0].cols;
-							Mat result1(linhas/2,colunas/2,0);
-							Mat result2(linhas/2,colunas/2,0);
-							for(int c = 0; c < linhas; c+=2){
-								for(int i = 0; i < colunas; i+=2){
-									result1.at<uchar>(c/2,i/2) = planes[1].at<uchar>(c,i);
-									result2.at<uchar>(c/2,i/2) = planes[2].at<uchar>(c,i);
-								}
+							new_planes = RGB_to_YUV420(frame, planes);
+
+							if (current_frame_number % period == 0){
+								for (int new_p = 0; new_p < 3; new_p++) p->encodeJPEG_LS(new_planes[new_p]);
 							}
-							if (n_of_current_frame % period == 0){
-								p->encodeJPEG_LS(planes[0]);
-								p->encodeJPEG_LS(result1);
-								p->encodeJPEG_LS(result2);
-							}else{
-								p->encode_by_blocks({planes[0],result1,result2});
-							}
-							p->set_last_frame({planes[0],result1,result2});
+							
+							else p->encode_by_blocks({new_planes[0],new_planes[1],new_planes[2]});
+							
+							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
 						count++;
-						n_of_current_frame++;
+						current_frame_number++;
 						
 					}
 	   				break;
@@ -609,16 +500,17 @@ class LosslessHybridCodec {
 			 * Function to decode the file
 			 */
 
-	   		Mat result;
-			Mat m1;
-	   		Mat m2;
-	   		Mat m3;
-	   		vector<Mat> channels ;
+	   		Mat result, m1, m2, m3;
+
+	   		vector<Mat> channels;
+
 	   		int fra = p->get_frames();
 	   		int mode = p->get_type();
 	   		int tipo = p->get_VideoType();
 	   		int periodo = p->get_period();
+
 	   		int count = 0;
+			   
 			switch (mode){
 	   			case 0:
 					for(int b = 0; b<fra;b++){
@@ -638,7 +530,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -678,7 +570,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -718,7 +610,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -753,7 +645,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -793,7 +685,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -833,7 +725,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -868,7 +760,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -908,7 +800,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -948,7 +840,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -983,7 +875,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1023,7 +915,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1063,7 +955,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1098,7 +990,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1138,7 +1030,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1178,7 +1070,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1213,7 +1105,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1253,7 +1145,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1293,7 +1185,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1328,7 +1220,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1368,7 +1260,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1408,7 +1300,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1443,7 +1335,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame(channels);
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1483,7 +1375,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1523,7 +1415,7 @@ class LosslessHybridCodec {
 								}
 								//cout << "Decoding frame: " << b+1 << endl;
 								p->set_last_frame({m1,result1,result2});
-							}else{
+							} else {
 			   					channels = p->decode_by_blocks();
 			   					merge(channels,result);
 			   					if (tipo != 0){
@@ -1544,22 +1436,3 @@ class LosslessHybridCodec {
 	   		return 1;
 	   	}	
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
