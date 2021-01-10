@@ -127,7 +127,7 @@ class Predictor {
 				 * @param planes channels of the frame
 				 */
 
-			lastFrame = planes;
+				lastFrame = planes;
 	    	}
 	    	
 	    	int get_period(){
