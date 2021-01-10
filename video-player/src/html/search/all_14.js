@@ -8,5 +8,7 @@ var searchData=
   ['readfile_97',['readFile',['../class_bit_stream.html#aa57e2f09c071d096af20f273934bbdf6',1,'BitStream']]],
   ['readnbits_98',['readNBits',['../class_bit_stream.html#a6bd23872284616ef322d3d226cc2eec8',1,'BitStream::readNBits()'],['../class_r_bit_stream.html#ae312c3e027ac73cca09a9c6d19bfdfb0',1,'RBitStream::readNBits()']]],
   ['readstring_99',['readString',['../class_r_bit_stream.html#a621c21c56d298aa744ea828975a96e8f',1,'RBitStream']]],
-  ['regular_5fblur_100',['regular_blur',['../methods_8cpp.html#afe1d843f76484893dbb432883fddfb9b',1,'regular_blur(Mat initial_image, int b1, int b2):&#160;methods.cpp'],['../methods_8hpp.html#a4c3f47e711dc2c4f7469758b07c82a7c',1,'regular_blur(cv::Mat initial_image, int b1, int b2):&#160;methods.hpp']]]
+  ['regular_5fblur_100',['regular_blur',['../methods_8cpp.html#afe1d843f76484893dbb432883fddfb9b',1,'regular_blur(Mat initial_image, int b1, int b2):&#160;methods.cpp'],['../methods_8hpp.html#a4c3f47e711dc2c4f7469758b07c82a7c',1,'regular_blur(cv::Mat initial_image, int b1, int b2):&#160;methods.hpp']]],
+  ['rgb_5fto_5fyuv420_101',['RGB_to_YUV420',['../class_lossless_hybrid_codec.html#a824e97fb01236dd074b4d0f726535eeb',1,'LosslessHybridCodec']]],
+  ['rgb_5fto_5fyuv422_102',['RGB_to_YUV422',['../class_lossless_hybrid_codec.html#a517baa969656d94c89ebd06b5c06a1bc',1,'LosslessHybridCodec']]]
 ];
