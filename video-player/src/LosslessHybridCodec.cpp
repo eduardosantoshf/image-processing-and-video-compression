@@ -72,6 +72,14 @@ class LosslessHybridCodec {
 	   	}
 
 		vector<Mat> RGB_to_YUV422(Mat frame, vector<Mat> planes) {
+
+			/**
+			 * Function to convert from RGB to YUV 4:2:2
+			 * 
+			 * @param frame frame to be converted
+			 * @param planes vector with split channels
+			 */
+
 			cvtColor(frame, frame, COLOR_RGB2YUV);
 			split(frame, planes);
 
@@ -94,6 +102,14 @@ class LosslessHybridCodec {
 		}
 
 		vector<Mat> RGB_to_YUV420(Mat frame, vector<Mat> planes) {
+
+			/**
+			 * Function to convert from RGB to YUV 4:2:0
+			 * 
+			 * @param frame frame to be converted
+			 * @param planes vector with split channels
+			 */
+
 			cvtColor(frame, frame, COLOR_RGB2YUV );
 			split(frame, planes);
 
