@@ -182,6 +182,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
@@ -226,6 +227,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
@@ -272,6 +274,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
@@ -318,6 +321,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
@@ -364,6 +368,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
@@ -410,6 +415,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
@@ -455,6 +461,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
@@ -501,6 +508,7 @@ class LosslessHybridCodec {
 							p->set_last_frame({new_planes[0],new_planes[1],new_planes[2]});
 						}
 						cap >> frame;
+						cout << "Encoding frame: " << count << endl; 
 						count++;
 						current_frame_number++;
 						
