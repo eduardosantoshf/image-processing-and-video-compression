@@ -12,3 +12,4 @@ video-player/src/LosslessIntraFrameCodec
 video-player/src/Encoded4JPEGLS.bin
 video-player/results/
 video-player/src/LosslessHybridCodec
+video-player/videos/
