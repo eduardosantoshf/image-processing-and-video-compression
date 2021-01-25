@@ -9,8 +9,10 @@ int main (int argc, char** argv) {
 	//vector<int> m_values = {2, 4, 5, 6, 7, 8};
 	
 	//attention to the subsampling mode of the video
-	//parameters: output file name - block size - search space - 
-	LosslessHybridCodec l(argv[1], 16, 3, 0, 7, 2, 5, 1, "../results/teste1_m" + to_string(2) + ".bin");
+	//parameters: output file name, block size, search space, video type, predictor type, m, periodicity, flag, filename
+	int m = 8;
+	int video_type = 2;
+	LosslessHybridCodec l(argv[1], 5, 3, video_type, 7, m, 5, 1, "../results/park_joy_420_m" + to_string(m) + ".bin");
 	
 	auto t1 = std::chrono::high_resolution_clock::now();
 	l.encode();
