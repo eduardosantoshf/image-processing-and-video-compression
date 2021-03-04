@@ -61,17 +61,17 @@ Class **LosslessHybridCodec**, with the following requirements:
     
 On the **CMakeList.txt** file, change the **add_executable** field to the desired executable filename.
 Inside the **/video-player/src/** directory, run the following commands:
-```
+```bash
 cmake .
 ```
-```
+```bash
 make
 ```
 
 ### Run
 
 Run the file:
-```
+```bash
 ./[executable_name] [args]
 ```
 
