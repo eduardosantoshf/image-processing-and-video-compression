@@ -76,3 +76,6 @@ Run the file:
 ```
 
 The # of args can be found inside each #.cpp file (#: 1 - 9)
+
+## Authors
+* **Eduardo Santos**: [eduardosantoshf](https://github.com/eduardosantoshf)
