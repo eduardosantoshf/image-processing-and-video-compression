@@ -77,5 +77,14 @@ Run the file:
 
 The # of args can be found inside each #.cpp file (#: 1 - 9)
 
+## Generate documentation
+
+To generate documentation, run the following command inside the **/video-player/src/** directory:
+```
+doxygen Doxyfile
+```
+
+Then, open the **index.html** file.
+
 ## Authors
 * **Eduardo Santos**: [eduardosantoshf](https://github.com/eduardosantoshf)
