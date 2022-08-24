@@ -1,4 +1,4 @@
-# CSLPProject
+# CSLP Project
 
 **Image Processing** and **Video compression** in C++, using **OpenCV** library
 
@@ -85,6 +85,15 @@ doxygen Doxyfile
 ```
 
 Then, open the **index.html** file.
+
+## Grades
+This project's grades (in a scale of 1 to 20) were:
+
+* Deliverable 1: **18**
+* Deliverable 2: **15**
+* Deliverable 3: **15**
+* Deliverable 4: **18**
+* Deliverable 5/6: **13**
 
 ## Authors
 * **Eduardo Santos**: [eduardosantoshf](https://github.com/eduardosantoshf)
